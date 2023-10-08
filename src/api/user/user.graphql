@@ -1,0 +1,13 @@
+type Query {
+  getCs(ykiho: String, saupkiho: String): CsType
+}
+
+type CsType {
+  gubun: String
+  code: String
+  myung: String
+  daepyo: String
+  saupnum: String
+  youngsu: String
+  cherbang: String
+}

@@ -1,0 +1,61 @@
+scalar Any
+scalar Date
+
+type Query {
+  getPaymentWithItems: [PaymentType!]
+}
+
+type Mutation {
+  checkout(dto: CheckoutInput!): CheckoutResult
+  cancelOrder(paymentId: Int!, paymentKey: String!, cancelReason: String!): CheckoutResult
+}
+
+type PaymentType {
+  id: Int!
+  ykiho: String!
+  orderId: String!
+  paymentKey: String!
+  method: String!
+  amount: Float!
+  quantity: Int!
+  approvedAt: Date!
+  sendType: String!
+  cancel: Boolean!
+  paymentItems: [PaymentItemType!]!
+}
+
+type PaymentItemType {
+  id: Int!
+  paymentId: Int!
+  code: String!
+  name: String!
+  fit: Boolean!
+  quantity: Int!
+  amount: Float!
+}
+
+input CheckoutInput {
+  paymentType: String!
+  orderId: String!
+  orderName: String!
+  paymentKey: String!
+  amount: Int!
+  quantity: Int!
+  items: [CheckoutCartItemInput!]!
+}
+
+input CheckoutCartItemInput {
+  code: String!
+  name: String!
+  fit: Boolean!
+  quantity: Int!
+  amount: Float!
+}
+
+type CheckoutResult {
+  success: Boolean!
+  errorCode: String
+  errorMessage: String
+  method: String  
+  approvedAt: Date
+}

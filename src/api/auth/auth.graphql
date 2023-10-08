@@ -1,0 +1,28 @@
+type Query{
+  getUser: User
+}
+
+type Mutation {
+  login(loginDto: LoginDto): AuthResult
+  logout: AuthResult
+}
+
+input LoginDto {
+  ykiho: String
+  saupkiho: String
+}
+
+type AuthResult {
+  message: String
+}
+
+type User {
+  jisa: String
+  ykiho: String
+  saupkiho: String
+  name: String
+  ceoName: String
+  fitCherbang: Boolean
+  fitYoungsu: Boolean
+  exp: Int
+}

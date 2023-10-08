@@ -1,0 +1,12 @@
+scalar Any
+
+type UpdateResult {
+  raw: Any
+  affected: Int
+  generatedMaps: Any!
+}
+
+type DeleteResult {
+  raw: Any
+  affected: Int
+}

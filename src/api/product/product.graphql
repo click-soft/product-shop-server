@@ -1,0 +1,28 @@
+type Query {
+  getProductsBunryuList(filter: ProductFilter): [ProductsByBunryu]
+}
+
+type ProductsByBunryu {
+  bunryu: String!
+  products: [Product!]!
+}
+
+type Product {
+  auto: Int!
+  jisa: String
+  smCode: String
+  smMyung: String
+  smYmd: String
+  danga: Int
+  danwi: String
+  etc1: String
+  etc2: String
+  etc3: String
+  etc4: String
+  etc5: String
+}
+
+input ProductFilter {
+  jisa: String!
+  bunryu: String
+}
