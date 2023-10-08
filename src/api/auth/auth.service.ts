@@ -31,7 +31,7 @@ export class AuthService {
       fitYoungsu: user.youngsu === "4"
     }
     const accessToken = await this.jwtService.signAsync(payload, { secret: this.configService.get('JWT_SECRET') });
-    res.cookie('jwt', accessToken, { httpOnly: true, sameSite: 'none' })
+    res.cookie('jwt', accessToken, { httpOnly: true, sameSite: 'none', secure: true })
 
     return {
       message: 'success'
