@@ -7,7 +7,7 @@ async function bootstrap() {
 
   app.use(cookieParser());
   app.enableCors({
-    origin: ['http://localhost:3001', 'https://localhost:3001', "https://web-product-shop-client-euegqv2blndv3jgq.sel5.cloudtype.app", "https://homepage-api-gateway.tosspayments.com/merchants/api/v1/"], // 허용할 출처    
+    origin: ['http://localhost:3001', 'https://localhost:3001', "https://click-soft.shop"], // 허용할 출처    
     credentials: true,
   });
 
