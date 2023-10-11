@@ -1,5 +1,5 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CheckoutInput, CheckoutResult, PaymentType, User } from 'src/graphql';
+import { CancelOrderInput, CheckoutInput, CheckoutResult, PaymentType, User } from 'src/graphql';
 import { PaymentService } from './payment.service';
 import { Response } from 'express';
 import { GetGqlUser } from 'src/decorators/get-user';
@@ -29,7 +29,19 @@ export class PaymentResolver {
   @Mutation()
   async cancelOrder(
     @Args("paymentId") paymentId: number,
-    @Args('paymentKey') paymentKey: string, @Args('cancelReason') cancelReason: string): Promise<CheckoutResult> {
+    @Args('paymentKey') paymentKey: string,
+    @Args('cancelReason') cancelReason: string): Promise<CheckoutResult> {
     return this.paymentService.cancelOrder(paymentId, paymentKey, cancelReason);
+  }
+
+  // @UseGuards(GqlAuthGuard)
+  @Query()
+  async getOrderCompleted(@Args("orderId") orderId: string): Promise<PaymentType> {
+    return await this.paymentService.getOrderCompleted(orderId);
+  }
+
+  @Mutation()
+  async refundOrder(@Args("dto") dto: CancelOrderInput): Promise<CheckoutResult> {
+    return await this.paymentService.refundOrder(dto);
   }
 }

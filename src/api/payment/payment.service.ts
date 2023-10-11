@@ -2,8 +2,11 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import PaymentItem from 'src/entities/cpm/payment-item.entity';
+import PaymentVirtual from 'src/entities/cpm/payment-virtual.entity';
 import Payment from 'src/entities/cpm/payment.entity';
-import { CheckoutCartItemInput, CheckoutInput, CheckoutResult, PaymentType } from 'src/graphql';
+import { CancelOrderInput, CheckoutCartItemInput, CheckoutInput, CheckoutResult, PaymentType } from 'src/graphql';
+import WebHookResult from 'src/interfaces/WebHookResult';
+import VirtualAccount from 'src/interfaces/virtual-account';
 import { Repository } from 'typeorm';
 
 
@@ -24,7 +27,6 @@ export class PaymentService {
   }
 
   private async savePayment({ ykiho, data, quantity }: { ykiho: string, data: any, quantity: number }): Promise<{ success: boolean, id?: number, errorMessage?: string }> {
-    let paymentId: number;
     try {
       const payment = Payment.create({
         id: 0,
@@ -34,14 +36,31 @@ export class PaymentService {
         method: data.method,
         amount: data.totalAmount,
         quantity,
-        approvedAt: data.approvedAt
+        requestedAt: data.requestedAt,
+        approvedAt: data.approvedAt,
+        sendType: data.status === 'WAITING_FOR_DEPOSIT' ? '결제대기' : '배송준비',
       });
       await this.paymentRepository.save(payment);
-      paymentId = payment.id;
+      const paymentId = payment.id;
+      if (data.virtualAccount) {
+        await this.savePaymentVirtual(paymentId, data.virtualAccount);
+      }
+      return { success: true, id: paymentId };
     } catch (error) {
       return { success: false, errorMessage: `결제 저장 중 오류가 발생했습니다.\n ----- \n ${error.message}` }
     }
-    return { success: true, id: paymentId };
+  }
+
+  private async savePaymentVirtual(paymentId: number, virt: VirtualAccount) {
+    const pmVirt = PaymentVirtual.create({
+      paymentId,
+      bankCode: virt.bankCode,
+      customerName: virt.customerName,
+      dueDate: virt.dueDate,
+      accountNumber: virt.accountNumber,
+    });
+
+    await pmVirt.save();
   }
 
   private async savePaymentItems(paymentId: number, items: CheckoutCartItemInput[]) {
@@ -85,16 +104,18 @@ export class PaymentService {
       errorCode: data.code,
       errorMessage: data.message,
       method: data.method,
+      requestedAt: data.requestedAt,
       approvedAt: data.approvedAt,
     };
 
-    console.log('result', result);
-
     if (result.success) {
       const paymentResult = await this.savePayment({ ykiho, data, quantity: dto.quantity });
-      if (paymentResult.success) {
-        await this.savePaymentItems(paymentResult.id, dto.items);
+      if (!paymentResult.success) {
+        await this.cancelToApi(dto.paymentKey, "결제오류 발생으로 인한 취소");
+        return paymentResult;
       }
+
+      await this.savePaymentItems(paymentResult.id, dto.items);
     }
 
     return result;
@@ -105,37 +126,128 @@ export class PaymentService {
       where: {
         ykiho
       },
-      relations: ['paymentItems'],
+      relations: ['paymentItems', 'virtual'],
       order: {
-        approvedAt: 'DESC'
+        id: 'DESC'
       }
     });
 
     return payments;
   }
 
-  async cancelOrder(paymentId: number, paymentKey: string, cancelReason: string): Promise<CheckoutResult> {
-    const url = this.getCancelUrl(paymentKey);
-    const headers = this.getHeaders();
-    headers['Idempotency-Key'] = 'SAAABPQbcqjEXiDL2';
-    const body = { cancelReason }
-    const response = await fetch(url, {
-      method: "POST",
-      headers: headers,
-      body: JSON.stringify(body),
-    });
 
-    const data = await response.json()
-    console.log(JSON.stringify(data));
+  private async cancelToApi(paymentKey: string, cancelReason: string)
+    : Promise<{ data?: any, errorMessage?: string }> {
+    try {
+      const url = this.getCancelUrl(paymentKey);
+      const headers = this.getHeaders();
+      headers['Idempotency-Key'] = 'SAAABPQbcqjEXiDL2';
+      const body = { cancelReason }
+      const response = await fetch(url, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(body),
+      });
 
-    if (data.status === 'CANCELED') {
-      this.paymentRepository.update(paymentId, { cancel: true })
+      const data = await response.json()
+      return {
+        data: data,
+      }
+    } catch (err) {
+      return {
+        errorMessage: err.message,
+      }
+    }
+  }
+
+  private async refundToApi(payment: Payment, dto: CancelOrderInput): Promise<{ data?: any, errorMessage?: string }> {
+    try {
+      const url = this.getCancelUrl(payment.paymentKey);
+      const headers = this.getHeaders();
+      // headers['Idempotency-Key'] = 'SAAABPQbcqjEXiDL2';
+      const body = {
+        cancelReason: dto.cancelReason,
+        cancelAccount: payment.amount,
+        refundReceiveAccount: {
+          bank: dto.bank,
+          accountNumber: dto.accountNumber,
+          holderName: dto.holderName,
+        }
+      }
+      const response = await fetch(url, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(body),
+      });
+
+      const data = await response.json()
+      return {
+        data: data,
+        errorMessage: data.message,
+      }
+    } catch (err) {
+      return {
+        errorMessage: err.message,
+      }
+    }
+  }
+
+  async refundOrder(dto: CancelOrderInput): Promise<CheckoutResult> {
+    const payment = await this.paymentRepository.findOne({ where: { id: dto.paymentId } });
+    const result = await this.refundToApi(payment, dto);
+
+    if (result.errorMessage) {
+      return {
+        success: false,
+        errorCode: result.errorMessage,
+        errorMessage: result.errorMessage,
+      }
+    } else {
+      this.paymentRepository.update(dto.paymentId, { cancel: true })
       return { success: true }
+    }
+  }
+
+  async cancelOrder(paymentId: number, paymentKey: string, cancelReason: string): Promise<CheckoutResult> {
+    const result = await this.cancelToApi(paymentKey, cancelReason)
+
+    if (result.data) {
+      if (result.data.status === 'CANCELED') {
+        this.paymentRepository.update(paymentId, { cancel: true })
+        return { success: true }
+      } else {
+        return {
+          success: false,
+          errorCode: result.data.code,
+          errorMessage: result.data.message
+        }
+      }
     } else {
       return {
         success: false,
-        errorCode: data.code,
-        errorMessage: data.message
+        errorCode: 'unknwon error',
+        errorMessage: result.errorMessage,
+      }
+    }
+  }
+
+  async getOrderCompleted(orderId: string): Promise<PaymentType> {
+    const response = await this.paymentRepository.findOne({ where: { orderId }, relations: ['virtual'] })
+
+    return await response;
+  }
+
+  async doneVirtualAccount(result: WebHookResult): Promise<Payment | { message: { message: string } }> {
+    try {
+      const payment = await this.paymentRepository.findOne({ where: { orderId: result.orderId } })
+      if (payment?.sendType === "결제대기") {
+        payment.sendType = "배송준비";
+        payment.approvedAt = result.createdAt;
+        return await payment.save();
+      }
+    } catch (err) {
+      return {
+        message: err.message
       }
     }
   }

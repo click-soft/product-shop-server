@@ -12,6 +12,7 @@ import { JwtConfigModule } from '../jwt/jwt-config.module';
     TypeOrmModule.forFeature([Payment, PaymentItem]),
     JwtConfigModule
   ],
-  providers: [PaymentResolver, PaymentService]
+  providers: [PaymentResolver, PaymentService],
+  exports: [PaymentService]
 })
 export class PaymentModule { }

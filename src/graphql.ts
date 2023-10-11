@@ -28,6 +28,14 @@ export class CartItemDto {
     updatedDate?: Nullable<Date>;
 }
 
+export class CancelOrderInput {
+    paymentId: number;
+    cancelReason: string;
+    bank?: Nullable<string>;
+    accountNumber?: Nullable<string>;
+    holderName?: Nullable<string>;
+}
+
 export class CheckoutInput {
     paymentType: string;
     orderId: string;
@@ -62,6 +70,8 @@ export abstract class IQuery {
 
     abstract getPaymentWithItems(): Nullable<PaymentType[]> | Promise<Nullable<PaymentType[]>>;
 
+    abstract getOrderCompleted(orderId: string): PaymentType | Promise<PaymentType>;
+
     abstract getProductsBunryuList(filter?: Nullable<ProductFilter>): Nullable<Nullable<ProductsByBunryu>[]> | Promise<Nullable<Nullable<ProductsByBunryu>[]>>;
 
     abstract getCs(ykiho?: Nullable<string>, saupkiho?: Nullable<string>): Nullable<CsType> | Promise<Nullable<CsType>>;
@@ -83,6 +93,8 @@ export abstract class IMutation {
     abstract checkout(dto: CheckoutInput): Nullable<CheckoutResult> | Promise<Nullable<CheckoutResult>>;
 
     abstract cancelOrder(paymentId: number, paymentKey: string, cancelReason: string): Nullable<CheckoutResult> | Promise<Nullable<CheckoutResult>>;
+
+    abstract refundOrder(dto: CancelOrderInput): Nullable<CheckoutResult> | Promise<Nullable<CheckoutResult>>;
 }
 
 export class AuthResult {
@@ -144,10 +156,19 @@ export class PaymentType {
     method: string;
     amount: number;
     quantity: number;
-    approvedAt: Date;
+    requestedAt: Date;
+    approvedAt?: Nullable<Date>;
     sendType: string;
     cancel: boolean;
     paymentItems: PaymentItemType[];
+    virtual?: Nullable<VirtualAccountType>;
+}
+
+export class VirtualAccountType {
+    bankCode: string;
+    customerName: string;
+    dueDate: Date;
+    accountNumber: string;
 }
 
 export class PaymentItemType {
@@ -165,6 +186,7 @@ export class CheckoutResult {
     errorCode?: Nullable<string>;
     errorMessage?: Nullable<string>;
     method?: Nullable<string>;
+    requestedAt?: Nullable<Date>;
     approvedAt?: Nullable<Date>;
 }
 

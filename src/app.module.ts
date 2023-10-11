@@ -13,6 +13,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { PaymentModule } from './api/payment/payment.module';
+import { WebHookModule } from './api/web-hook/web-hook.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { PaymentModule } from './api/payment/payment.module';
     CartModule,
     JwtConfigModule,
     PaymentModule,
+    WebHookModule,
   ],
   controllers: [AppController],
   providers: [AppService],

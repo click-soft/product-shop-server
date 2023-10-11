@@ -9,8 +9,6 @@ export default class ProductResolver {
   @Query()
   async getProductsBunryuList(
     @Args('filter') filter: ProductFilter): Promise<ProductsByBunryu[]> {
-      console.log("getProductsBunryuList");
-      
     return await this.productService.getAll(filter);
   }
 }

@@ -3,11 +3,25 @@ scalar Date
 
 type Query {
   getPaymentWithItems: [PaymentType!]
+  getOrderCompleted(orderId: String!): PaymentType!
 }
 
 type Mutation {
   checkout(dto: CheckoutInput!): CheckoutResult
-  cancelOrder(paymentId: Int!, paymentKey: String!, cancelReason: String!): CheckoutResult
+  cancelOrder(
+    paymentId: Int!
+    paymentKey: String!
+    cancelReason: String!
+  ): CheckoutResult
+  refundOrder(dto: CancelOrderInput!): CheckoutResult
+}
+
+input CancelOrderInput {
+  paymentId: Int!
+  cancelReason: String!
+  bank: String
+  accountNumber: String
+  holderName: String
 }
 
 type PaymentType {
@@ -18,10 +32,19 @@ type PaymentType {
   method: String!
   amount: Float!
   quantity: Int!
-  approvedAt: Date!
+  requestedAt: Date!
+  approvedAt: Date
   sendType: String!
   cancel: Boolean!
   paymentItems: [PaymentItemType!]!
+  virtual: VirtualAccountType
+}
+
+type VirtualAccountType {
+  bankCode: String!
+  customerName: String!
+  dueDate: Date!
+  accountNumber: String!
 }
 
 type PaymentItemType {
@@ -56,6 +79,7 @@ type CheckoutResult {
   success: Boolean!
   errorCode: String
   errorMessage: String
-  method: String  
+  method: String
+  requestedAt: Date
   approvedAt: Date
 }

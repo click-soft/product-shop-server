@@ -50,8 +50,6 @@ export default class CartResolver {
   @UseGuards(GqlAuthGuard)
   @Mutation()
   async deleteCartItems(@Args("ids") ids: number[]): Promise<DeleteResult> {
-    console.log(ids);
-    
     return await this.cartService.deleteCartItems(...ids);
   }
 }
