@@ -30,11 +30,17 @@ export class AuthService {
       fitCherbang: user.cherbang === '4',
       fitYoungsu: user.youngsu === "4"
     }
-    const accessToken = await this.jwtService.signAsync(payload, { secret: this.configService.get('JWT_SECRET') });
-    res.cookie('jwt', accessToken, { httpOnly: true, sameSite: 'none', secure: true })
 
-    return {
-      message: 'success'
+    try {
+      const accessToken = await this.jwtService.signAsync(payload, { secret: this.configService.get('JWT_SECRET') });
+      res.cookie('jwt', accessToken, { httpOnly: true })
+
+      return {
+        message: 'success'
+      }
+    } catch (err) {
+      console.log(err);
+
     }
   }
 }
