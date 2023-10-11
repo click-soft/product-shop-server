@@ -29,7 +29,7 @@ export default class AuthResolver {
 
   @Mutation(() => MessageResult)
   async logout(@Context('req') req: Request, @Context('res') res: Response) {
-    res.cookie('jwt', '', { maxAge: 0 })
+    res.cookie('jwt', '', { maxAge: 0, httpOnly: true, sameSite: 'none', secure: true })
     return {
       message: 'success'
     }
