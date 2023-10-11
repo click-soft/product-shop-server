@@ -29,6 +29,7 @@ export default class AuthResolver {
 
   @Mutation(() => MessageResult)
   async logout(@Context('req') req, @Context('res') res: Response) {
+    res.clearCookie('user');
     res.clearCookie('jwt');
 
     req.user = undefined;
