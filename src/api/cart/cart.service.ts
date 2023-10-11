@@ -1,11 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Cart } from '../../entities/cpm/cart.entity';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CartItem, CartItem as CartItemEntity } from 'src/entities/cpm/cart-item.entity';
 import { ProductService } from '../product/product.service';
 import { ProductListSub } from 'src/entities/cpm/productlistsub.entity';
-import { CartItemDto, CartResult, DeleteResult, UpdateCartItemInput, UpdateResult } from 'src/graphql';
+import CartItemArgs from './dto/cart-item.args';
+import { Args } from '@nestjs/graphql';
 
 @Injectable()
 export class CartService {
@@ -48,16 +49,16 @@ export class CartService {
     return cart;
   }
 
-  async saveCart(ykiho: string, item: CartItemDto): Promise<{ message: string }> {
+  async saveCart(ykiho: string, args: CartItemArgs): Promise<{ message: string }> {
     const cart: Cart = await this.createCart(ykiho);
     const newCartItem = CartItemEntity.create({
-      id: item.id,
-      cartId: item.cartId,
-      code: item.code,
-      quantity: item.quantity,
-      fit: item.fit,
-      createdDate: item.createdDate,
-      updatedDate: item.updatedDate
+      id: args.id,
+      cartId: args.cartId,
+      code: args.code,
+      quantity: args.quantity,
+      fit: args.fit,
+      createdDate: args.createdDate,
+      updatedDate: args.updatedDate
     });
 
     if (cart.cartItems) {
@@ -86,7 +87,7 @@ export class CartService {
   }
 
   async getItemsCount(ykiho: string): Promise<number> {
-    const baseCart: Cart = await this.getCart(ykiho);
+    const baseCart = await this.getCart(ykiho);
     const itemsCount: number = baseCart.cartItems.reduce((acc: number, ci: CartItem) => {
       return acc + ci.quantity;
     }, 0)

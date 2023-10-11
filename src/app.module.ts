@@ -9,11 +9,9 @@ import { AuthModule } from './api/auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CartModule } from './api/cart/cart.module';
 import { JwtConfigModule } from './api/jwt/jwt-config.module';
-import { GraphQLModule } from '@nestjs/graphql';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { join } from 'path';
 import { PaymentModule } from './api/payment/payment.module';
 import { WebHookModule } from './api/web-hook/web-hook.module';
+import { GraphqlModule } from './graphql/graphql.module';
 
 @Module({
   imports: [
@@ -25,15 +23,7 @@ import { WebHookModule } from './api/web-hook/web-hook.module';
       useClass: MySqlCpmConfigService,
       inject: [MySqlCpmConfigService],
     }),
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      driver: ApolloDriver,
-      typePaths: ['./**/*.graphql'],
-      definitions: {
-        path: join(process.cwd(), 'src/graphql.ts'),
-        outputAs: 'class',
-      },
-      context: ({ req, res }) => ({ req, res }),
-    }),
+    GraphqlModule,
     ProductModule,
     UserModule,
     AuthModule,
@@ -41,6 +31,7 @@ import { WebHookModule } from './api/web-hook/web-hook.module';
     JwtConfigModule,
     PaymentModule,
     WebHookModule,
+    GraphqlModule,
   ],
   controllers: [AppController],
   providers: [AppService],

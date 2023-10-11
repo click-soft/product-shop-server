@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import User from 'src/interfaces/user';
-import { LoginDto } from 'src/graphql';
+import LoginArgs from '../_common/dto/login.args';
 
 @Injectable()
 export class AuthService {
@@ -14,8 +14,8 @@ export class AuthService {
     private configService: ConfigService
   ) { }
 
-  async login(dto: LoginDto, res: Response) {
-    const user = await this.userService.getUser({ ykiho: dto.ykiho, saupkiho: dto.saupkiho });
+  async login(args: LoginArgs, res: Response) {
+    const user = await this.userService.getUser({ ykiho: args.ykiho, saupkiho: args.saupkiho });
 
     if (!user) {
       throw new NotFoundException("사용자 정보가 존재하지 않음.")

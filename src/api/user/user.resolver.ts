@@ -1,12 +1,14 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
-import { CsType } from 'src/graphql';
 import { UserService } from './user.service';
+import { CsType } from './types/cs-type';
+import LoginArgs from '../_common/dto/login.args';
 
 @Resolver()
 export class UserResolver {
   constructor(private userService: UserService) { }
-  @Query()
-  async getCs(@Args("ykiho") ykiho?: string, @Args("saupkiho") saupkiho?: string): Promise<CsType> {
-    return this.userService.getUser({ ykiho, saupkiho });
+  @Query(() => CsType)
+  async getCs(@Args() arg: LoginArgs) {
+
+    return this.userService.getUser({ ykiho: arg.ykiho, saupkiho: arg.saupkiho });
   }
 }

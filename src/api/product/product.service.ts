@@ -3,7 +3,8 @@ import { Repository } from 'typeorm';
 import { ProductList } from '../../entities/cpm/productlist.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductListSub } from '../../entities/cpm/productlistsub.entity';
-import { ProductFilter, ProductsByBunryu } from 'src/graphql';
+import { ProductArgs } from './dto/product.args';
+import { ProductsByBunryu } from './types/products-by-bunryu';
 
 @Injectable()
 export class ProductService {
@@ -38,7 +39,7 @@ export class ProductService {
     return productLists.find(pls => pls.smCode === smCode)?.bunryu;
   }
 
-  async getAll(filter: ProductFilter): Promise<ProductsByBunryu[] | undefined> {
+  async getAll(filter: ProductArgs): Promise<ProductsByBunryu[] | undefined> {
     const productLists = await this.getProductLists(filter.jisa, filter.bunryu);
 
     if (productLists.length === 0) return undefined;

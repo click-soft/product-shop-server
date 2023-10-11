@@ -1,0 +1,184 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type ProductListSub {
+  auto: Float
+  jisa: String
+  smCode: String
+  smMyung: String
+  smYmd: String
+  danga: Float
+  danwi: String
+  etc1: String
+  etc2: String
+  etc3: String
+  etc4: String
+  etc5: String
+  productList: [ProductList!]
+}
+
+type ProductList {
+  jisa: String!
+  smCode: String!
+  smYmd: String!
+  addUser: String!
+  createDt: DateTime!
+  bigo: String!
+  web: Boolean!
+  bunryu: String!
+  productListSub: ProductListSub!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type ProductsByBunryu {
+  bunryu: String!
+  products: [ProductListSub!]!
+}
+
+type CsType {
+  gubun: String!
+  code: String!
+  myung: String!
+  daepyo: String!
+  saupnum: String!
+  youngsu: String!
+  cherbang: String!
+}
+
+type User {
+  jisa: String!
+  ykiho: String!
+  saupkiho: String!
+  name: String!
+  ceoName: String!
+  fitCherbang: Boolean!
+  fitYoungsu: Boolean!
+  exp: Int!
+}
+
+type MessageResult {
+  message: String!
+}
+
+type CartItem {
+  id: Int!
+  cartId: Int!
+  code: String!
+  quantity: Int!
+  fit: Boolean!
+  createdDate: DateTime!
+  updatedDate: DateTime!
+  cart: Cart!
+  product: ProductListSub!
+}
+
+type Cart {
+  id: Int!
+  ykiho: String!
+  cartItems: [CartItem!]!
+}
+
+type DeleteResult {
+  raw: Any
+  affected: Int!
+}
+
+type UpdateResult {
+  raw: Any
+  affected: Int!
+  generatedMaps: Any!
+}
+
+type PaymentVirtual {
+  id: Float!
+  paymentId: Float!
+  bankCode: String!
+  customerName: String!
+  dueDate: DateTime!
+  accountNumber: String!
+  payment: Payment!
+}
+
+type Payment {
+  id: Float!
+  ykiho: String!
+  orderId: String!
+  paymentKey: String!
+  method: String!
+  amount: Float!
+  quantity: Float!
+  requestedAt: DateTime
+  approvedAt: DateTime
+  sendType: String!
+  cancel: Boolean!
+  paymentItems: [PaymentItem!]
+  virtual: PaymentVirtual
+}
+
+type PaymentItem {
+  id: Float!
+  paymentId: Float!
+  code: String!
+  name: String!
+  fit: Boolean!
+  quantity: Float!
+  amount: Float!
+  payment: Payment!
+}
+
+type CheckoutResult {
+  success: Boolean!
+  errorCode: String
+  errorMessage: String
+  method: String
+  requestedAt: DateTime
+  approvedAt: DateTime
+}
+
+"""Any scalar type"""
+scalar Any
+
+type Query {
+  getProductsBunryuList(jisa: String!, bunryu: String): [ProductsByBunryu!]!
+  getCs(ykiho: String, saupkiho: String): CsType!
+  getUser: User!
+  cartItemsCount: Int!
+  getCart: Cart!
+  getCartWithProduct: Cart!
+  getPaymentWithItems: [Payment!]!
+  getOrderCompleted(orderId: String!): Payment!
+}
+
+type Mutation {
+  login(ykiho: String, saupkiho: String): MessageResult!
+  logout: MessageResult!
+  addToCart(id: Int, cartId: Int, code: String!, quantity: Int!, fit: Boolean!, createdDate: DateTime, updatedDate: DateTime): MessageResult!
+  updateCartItemQuantity(id: Int!, quantity: Int!): UpdateResult!
+  deleteCartItems(ids: [Int!]!): DeleteResult!
+  checkout(dto: CheckoutInput!): CheckoutResult!
+  cancelOrder(paymentId: Int!, paymentKey: String!, cancelReason: String!): CheckoutResult!
+  refundOrder(paymentId: Int!, cancelReason: String!, bank: String!, accountNumber: String!, holderName: String!): CheckoutResult!
+}
+
+input CheckoutInput {
+  paymentType: String!
+  orderId: String!
+  orderName: String!
+  paymentKey: String!
+  amount: Int!
+  quantity: Int!
+  items: [CheckoutCartItemInput!]!
+}
+
+input CheckoutCartItemInput {
+  code: String!
+  name: String!
+  fit: Boolean!
+  quantity: Int!
+  amount: Int!
+}

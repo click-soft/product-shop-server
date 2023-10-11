@@ -4,10 +4,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import PaymentItem from 'src/entities/cpm/payment-item.entity';
 import PaymentVirtual from 'src/entities/cpm/payment-virtual.entity';
 import Payment from 'src/entities/cpm/payment.entity';
-import { CancelOrderInput, CheckoutCartItemInput, CheckoutInput, CheckoutResult, PaymentType } from 'src/graphql';
 import WebHookResult from 'src/interfaces/WebHookResult';
 import VirtualAccount from 'src/interfaces/virtual-account';
 import { Repository } from 'typeorm';
+import { CheckoutCartItemInput } from './dto/checkout-cart-item.input';
+import { CheckoutInput } from './dto/checkout.input';
+import { CheckoutResult } from './types/checkout-result';
+import { RefundOrderArgs } from './dto/refund-order.args';
 
 
 @Injectable()
@@ -104,8 +107,8 @@ export class PaymentService {
       errorCode: data.code,
       errorMessage: data.message,
       method: data.method,
-      requestedAt: data.requestedAt,
-      approvedAt: data.approvedAt,
+      requestedAt: new Date(data.requestedAt),
+      approvedAt: new Date(data.approvedAt),
     };
 
     if (result.success) {
@@ -121,8 +124,8 @@ export class PaymentService {
     return result;
   }
 
-  async getPaymentsWithItems(ykiho: string): Promise<PaymentType[]> {
-    const payments: PaymentType[] = await this.paymentRepository.find({
+  async getPaymentsWithItems(ykiho: string): Promise<Payment[]> {
+    const payments: Payment[] = await this.paymentRepository.find({
       where: {
         ykiho
       },
@@ -160,7 +163,7 @@ export class PaymentService {
     }
   }
 
-  private async refundToApi(payment: Payment, dto: CancelOrderInput): Promise<{ data?: any, errorMessage?: string }> {
+  private async refundToApi(payment: Payment, dto: RefundOrderArgs): Promise<{ data?: any, errorMessage?: string }> {
     try {
       const url = this.getCancelUrl(payment.paymentKey);
       const headers = this.getHeaders();
@@ -192,7 +195,7 @@ export class PaymentService {
     }
   }
 
-  async refundOrder(dto: CancelOrderInput): Promise<CheckoutResult> {
+  async refundOrder(dto: RefundOrderArgs): Promise<CheckoutResult> {
     const payment = await this.paymentRepository.findOne({ where: { id: dto.paymentId } });
     const result = await this.refundToApi(payment, dto);
 
@@ -231,7 +234,7 @@ export class PaymentService {
     }
   }
 
-  async getOrderCompleted(orderId: string): Promise<PaymentType> {
+  async getOrderCompleted(orderId: string): Promise<Payment> {
     const response = await this.paymentRepository.findOne({ where: { orderId }, relations: ['virtual'] })
 
     return await response;
