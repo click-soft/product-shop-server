@@ -12,8 +12,8 @@ import LoginArgs from "../_common/dto/login.args";
 export default class AuthResolver {
   constructor(private authService: AuthService) { }
 
-  @Query(() => User)
   @UseGuards(GqlAuthGuard)
+  @Query(() => User)
   async getUser(@GetGqlUser() user: User) {
     return user;
   }
@@ -28,12 +28,8 @@ export default class AuthResolver {
   }
 
   @Mutation(() => MessageResult)
-  async logout(@Context('req') req, @Context('res') res: Response) {
-    res.clearCookie('user');
-    res.clearCookie('jwt');
-
-    req.user = undefined;
-
+  async logout(@Context('req') req: Request, @Context('res') res: Response) {
+    res.cookie('jwt', '', { maxAge: 0 })
     return {
       message: 'success'
     }
