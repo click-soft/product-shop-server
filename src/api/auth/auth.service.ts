@@ -33,7 +33,7 @@ export class AuthService {
 
     try {
       const accessToken = await this.jwtService.signAsync(payload, { secret: this.configService.get('JWT_SECRET') });
-      res.cookie('jwt', accessToken, { httpOnly: true })
+      res.cookie('jwt', accessToken, { httpOnly: true, sameSite: 'none', secure: true })
 
       return {
         message: 'success'
