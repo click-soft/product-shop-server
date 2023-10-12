@@ -65,6 +65,11 @@ type MessageResult {
   message: String!
 }
 
+type TokenResult {
+  accessToken: String
+  usr: String
+}
+
 type CartItem {
   id: Int!
   cartId: Int!
@@ -155,8 +160,9 @@ type Query {
 }
 
 type Mutation {
-  login(ykiho: String, saupkiho: String): MessageResult!
+  login(ykiho: String, saupkiho: String): TokenResult!
   logout: MessageResult!
+  refresh(key: String!): TokenResult!
   addToCart(id: Int, cartId: Int, code: String!, quantity: Int!, fit: Boolean!, createdDate: DateTime, updatedDate: DateTime): MessageResult!
   updateCartItemQuantity(id: Int!, quantity: Int!): UpdateResult!
   deleteCartItems(ids: [Int!]!): DeleteResult!

@@ -12,6 +12,7 @@ import { JwtConfigModule } from './api/jwt/jwt-config.module';
 import { PaymentModule } from './api/payment/payment.module';
 import { WebHookModule } from './api/web-hook/web-hook.module';
 import { GraphqlModule } from './graphql/graphql.module';
+import { AccountModule } from './api/account/account.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { GraphqlModule } from './graphql/graphql.module';
     PaymentModule,
     WebHookModule,
     GraphqlModule,
+    AccountModule,
   ],
   controllers: [AppController],
   providers: [AppService],

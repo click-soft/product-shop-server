@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Cs } from '../../entities/cpm/cs.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from '../auth/types/user';
 
 @Injectable()
 export class UserService {
@@ -31,5 +32,17 @@ export class UserService {
     })
 
     return result;
+  }
+
+  convertCsToUser(cs: Cs): User {
+    return {
+      jisa: cs.gubun,
+      ykiho: cs.code,
+      saupkiho: cs.saupnum,
+      name: cs.myung,
+      ceoName: cs.daepyo,
+      fitCherbang: cs.cherbang === '4',
+      fitYoungsu: cs.youngsu === "4"
+    }
   }
 }
