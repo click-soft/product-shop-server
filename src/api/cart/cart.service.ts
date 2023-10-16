@@ -6,7 +6,6 @@ import { CartItem, CartItem as CartItemEntity } from 'src/entities/cpm/cart-item
 import { ProductService } from '../product/product.service';
 import { ProductListSub } from 'src/entities/cpm/productlistsub.entity';
 import CartItemArgs from './dto/cart-item.args';
-import { Args } from '@nestjs/graphql';
 
 @Injectable()
 export class CartService {
@@ -88,7 +87,7 @@ export class CartService {
 
   async getItemsCount(ykiho: string): Promise<number> {
     const baseCart = await this.getCart(ykiho);
-    const itemsCount: number = baseCart.cartItems.reduce((acc: number, ci: CartItem) => {
+    const itemsCount: number = baseCart?.cartItems?.reduce((acc: number, ci: CartItem) => {
       return acc + ci.quantity;
     }, 0)
 

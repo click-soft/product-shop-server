@@ -11,6 +11,7 @@ import { CheckoutCartItemInput } from './dto/checkout-cart-item.input';
 import { CheckoutInput } from './dto/checkout.input';
 import { CheckoutResult } from './types/checkout-result';
 import { RefundOrderArgs } from './dto/refund-order.args';
+import { ProductService } from '../product/product.service';
 
 
 @Injectable()
@@ -22,6 +23,7 @@ export class PaymentService {
     private paymentRepository: Repository<Payment>,
     @InjectRepository(PaymentItem)
     private paymentItemRepository: Repository<PaymentItem>,
+    private productService: ProductService,
     private configService: ConfigService,
   ) { }
 
@@ -29,29 +31,22 @@ export class PaymentService {
     return `https://api.tosspayments.com/v1/payments/${paymentKey}/cancel`;
   }
 
-  private async savePayment({ ykiho, data, quantity }: { ykiho: string, data: any, quantity: number }): Promise<{ success: boolean, id?: number, errorMessage?: string }> {
-    try {
-      const payment = Payment.create({
-        id: 0,
-        ykiho,
-        orderId: data.orderId,
-        paymentKey: data.paymentKey,
-        method: data.method,
-        amount: data.totalAmount,
-        quantity,
-        requestedAt: data.requestedAt,
-        approvedAt: data.approvedAt,
-        sendType: data.status === 'WAITING_FOR_DEPOSIT' ? '결제대기' : '배송준비',
-      });
-      await this.paymentRepository.save(payment);
-      const paymentId = payment.id;
-      if (data.virtualAccount) {
-        await this.savePaymentVirtual(paymentId, data.virtualAccount);
-      }
-      return { success: true, id: paymentId };
-    } catch (error) {
-      return { success: false, errorMessage: `결제 저장 중 오류가 발생했습니다.\n ----- \n ${error.message}` }
-    }
+  private async savePayment({ ykiho, data, quantity }: { ykiho: string, data: any, quantity: number }): Promise<Payment> {
+    const payment = Payment.create({
+      id: 0,
+      ykiho,
+      orderId: data.orderId,
+      paymentKey: data.paymentKey,
+      method: data.method,
+      amount: data.totalAmount,
+      quantity,
+      requestedAt: data.requestedAt,
+      approvedAt: data.approvedAt,
+      sendType: data.status === 'WAITING_FOR_DEPOSIT' ? '결제대기' : '주문확인',
+    });
+    await this.paymentRepository.save(payment);
+
+    return payment;
   }
 
   private async savePaymentVirtual(paymentId: number, virt: VirtualAccount) {
@@ -66,7 +61,7 @@ export class PaymentService {
     await pmVirt.save();
   }
 
-  private async savePaymentItems(paymentId: number, items: CheckoutCartItemInput[]) {
+  private async savePaymentItems(paymentId: number, items: CheckoutCartItemInput[]): Promise<PaymentItem[]> {
     const paymentItems = items.map(item => {
       return PaymentItem.create({
         paymentId,
@@ -74,7 +69,7 @@ export class PaymentService {
       })
     })
 
-    await this.paymentItemRepository.save(paymentItems);
+    return await this.paymentItemRepository.save(paymentItems);
   }
 
   private getHeaders() {
@@ -112,13 +107,24 @@ export class PaymentService {
     };
 
     if (result.success) {
-      const paymentResult = await this.savePayment({ ykiho, data, quantity: dto.quantity });
-      if (!paymentResult.success) {
+      let savedPayment: Payment;
+      try {
+        savedPayment = await this.savePayment({ ykiho, data, quantity: dto.quantity });
+      } catch (err) {
         await this.cancelToApi(dto.paymentKey, "결제오류 발생으로 인한 취소");
-        return paymentResult;
+        return {
+          success: false,
+          errorCode: "checkout error",
+          errorMessage: err.message,
+        }
       }
-
-      await this.savePaymentItems(paymentResult.id, dto.items);
+      if (savedPayment) {
+        const paymentItems = await this.savePaymentItems(savedPayment.id, dto.items);
+        if (data.virtualAccount) {
+          await this.savePaymentVirtual(savedPayment.id, data.virtualAccount);
+        }
+        this.productService.saveProductByPayment(savedPayment, paymentItems);
+      }
     }
 
     return result;
@@ -244,7 +250,7 @@ export class PaymentService {
     try {
       const payment = await this.paymentRepository.findOne({ where: { orderId: result.orderId } })
       if (payment?.sendType === "결제대기") {
-        payment.sendType = "배송준비";
+        payment.sendType = "주문확인";
         payment.approvedAt = result.createdAt;
         return await payment.save();
       }

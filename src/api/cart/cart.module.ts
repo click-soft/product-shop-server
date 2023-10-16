@@ -8,10 +8,11 @@ import { ProductService } from '../product/product.service';
 import { ProductListSub } from 'src/entities/cpm/productlistsub.entity';
 import { ProductList } from 'src/entities/cpm/productlist.entity';
 import CartResolver from './cart.resolver';
+import Product from 'src/entities/cpm/product.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Cart, CartItem, ProductList, ProductListSub]),
+    TypeOrmModule.forFeature([Cart, CartItem, Product, ProductList, ProductListSub]),
     JwtConfigModule
   ],
   providers: [CartService, ProductService, CartResolver],

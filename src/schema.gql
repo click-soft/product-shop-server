@@ -40,6 +40,43 @@ type ProductsByBunryu {
   products: [ProductListSub!]!
 }
 
+type PaymentItem {
+  id: Float!
+  paymentId: Float!
+  code: String!
+  name: String!
+  fit: Boolean!
+  quantity: Float!
+  amount: Float!
+  payment: Payment!
+}
+
+type PaymentVirtual {
+  id: Float!
+  paymentId: Float!
+  bankCode: String!
+  customerName: String!
+  dueDate: DateTime!
+  accountNumber: String!
+  payment: Payment!
+}
+
+type Payment {
+  id: Float!
+  ykiho: String!
+  orderId: String!
+  paymentKey: String!
+  method: String!
+  amount: Float!
+  quantity: Float!
+  requestedAt: DateTime
+  approvedAt: DateTime
+  sendType: String!
+  cancel: Boolean!
+  paymentItems: [PaymentItem!]
+  virtual: PaymentVirtual
+}
+
 type CsType {
   gubun: String!
   code: String!
@@ -48,6 +85,18 @@ type CsType {
   saupnum: String!
   youngsu: String!
   cherbang: String!
+}
+
+type Account {
+  id: Float!
+  userId: String!
+  password: String!
+  ykiho: String
+  saupkiho: String
+  token: String
+  expiryDate: DateTime
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 type User {
@@ -99,43 +148,6 @@ type UpdateResult {
   generatedMaps: Any!
 }
 
-type PaymentVirtual {
-  id: Float!
-  paymentId: Float!
-  bankCode: String!
-  customerName: String!
-  dueDate: DateTime!
-  accountNumber: String!
-  payment: Payment!
-}
-
-type Payment {
-  id: Float!
-  ykiho: String!
-  orderId: String!
-  paymentKey: String!
-  method: String!
-  amount: Float!
-  quantity: Float!
-  requestedAt: DateTime
-  approvedAt: DateTime
-  sendType: String!
-  cancel: Boolean!
-  paymentItems: [PaymentItem!]
-  virtual: PaymentVirtual
-}
-
-type PaymentItem {
-  id: Float!
-  paymentId: Float!
-  code: String!
-  name: String!
-  fit: Boolean!
-  quantity: Float!
-  amount: Float!
-  payment: Payment!
-}
-
 type CheckoutResult {
   success: Boolean!
   errorCode: String
@@ -154,13 +166,14 @@ type Query {
   getUser: User!
   cartItemsCount: Int!
   getCart: Cart!
-  getCartWithProduct: Cart!
+  getCartWithProduct: Cart
   getPaymentWithItems: [Payment!]!
   getOrderCompleted(orderId: String!): Payment!
+  getAccount(userId: String!): Account!
 }
 
 type Mutation {
-  login(ykiho: String, saupkiho: String): TokenResult!
+  login(userId: String!, password: String!): TokenResult!
   logout: MessageResult!
   refresh(key: String!): TokenResult!
   addToCart(id: Int, cartId: Int, code: String!, quantity: Int!, fit: Boolean!, createdDate: DateTime, updatedDate: DateTime): MessageResult!
@@ -169,6 +182,7 @@ type Mutation {
   checkout(dto: CheckoutInput!): CheckoutResult!
   cancelOrder(paymentId: Int!, paymentKey: String!, cancelReason: String!): CheckoutResult!
   refundOrder(paymentId: Int!, cancelReason: String!, bank: String!, accountNumber: String!, holderName: String!): CheckoutResult!
+  saveAccount(userId: String!, password: String!): Account!
 }
 
 input CheckoutInput {

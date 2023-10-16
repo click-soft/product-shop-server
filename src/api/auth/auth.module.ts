@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { UserModule } from '../user/user.module';
+import { CsModule } from '../cs/cs.module';
 import { JwtConfigModule } from '../jwt/jwt-config.module';
 import AuthResolver from './auth.resolver';
 import { AccountService } from '../account/account.service';
@@ -10,7 +10,7 @@ import { Account } from 'src/entities/cpm/account.entity';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Account]),
-    UserModule,
+    CsModule,
     JwtConfigModule,
   ],
   providers: [AuthService, AuthResolver, AccountService]

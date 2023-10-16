@@ -7,14 +7,14 @@ export class WebHookController {
   constructor(private webHookService: WebHookService) { }
 
   @Get('/')
-  getIndex() {
-    return "api/webhook"
+  async getIndex() {
+
   }
 
   @Post('/')
   async postWebHook(@Body() body) {
     await this.webHookService.checkoutVirtualAccount(body)
- 
+
     return body;
   }
 }

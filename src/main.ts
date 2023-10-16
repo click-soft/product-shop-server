@@ -1,3 +1,4 @@
+import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as cookieParser from 'cookie-parser';
 import { AppModule } from 'src/app.module';
@@ -6,6 +7,12 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.use(cookieParser());
+  app.useGlobalPipes(new ValidationPipe({
+    exceptionFactory: (errors) => {
+      let messages = errors.map(error => Object.values(error.constraints)).join(', ');
+      return new BadRequestException(messages);
+    },
+  }));
   app.enableCors({
     origin: ['http://localhost:3001', 'https://localhost:3001', "https://www.click-soft.shop"], // 허용할 출처    
     credentials: true,

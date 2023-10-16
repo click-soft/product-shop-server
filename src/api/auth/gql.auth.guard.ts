@@ -17,7 +17,7 @@ export class GqlAuthGuard implements CanActivate {
     if (!token) throw new UnauthorizedException();
 
     try {
-      const payload = await this.jwtService.verifyAsync(
+      const payload = await this.jwtService.verify(
         token,
         {
           secret: this.configService.get<string>("JWT_SECRET")

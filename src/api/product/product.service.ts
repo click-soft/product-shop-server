@@ -5,10 +5,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ProductListSub } from '../../entities/cpm/productlistsub.entity';
 import { ProductArgs } from './dto/product.args';
 import { ProductsByBunryu } from './types/products-by-bunryu';
-
+import PaymentItem from 'src/entities/cpm/payment-item.entity';
+import Product from 'src/entities/cpm/product.entity';
+import Payment from 'src/entities/cpm/payment.entity';
+import * as moment from 'moment';
 @Injectable()
 export class ProductService {
   constructor(
+    @InjectRepository(Product)
+    private productRepository: Repository<Product>,
     @InjectRepository(ProductList)
     private productListRepository: Repository<ProductList>,
     @InjectRepository(ProductListSub)
@@ -87,5 +92,24 @@ export class ProductService {
     return lastestData;
   }
 
+  async saveProductByPayment(payment: Payment, paymentItems: PaymentItem[]) {
+    let product: Product;
+    const products = paymentItems.map(item => {
+      return Product.create({
+        clCode: item.code,
+        csCode: payment.ykiho,
+        ctTel: "",
+        count: item.quantity,
+        receive: '000',
+        receiveYmd: moment(payment.requestedAt).format("YYYYMMDD"),
+        sell: '0',
+        check: '0',
+        check2: '1',
+        web: true,
+        webPaymentItemId: item.id,
+      });
+    });
 
+    this.productRepository.save(products);
+  }
 }

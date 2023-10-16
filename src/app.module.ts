@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MySqlCpmConfigService } from './config/typeorm.config';
 import { ProductModule } from './api/product/product.module';
-import { UserModule } from './api/user/user.module';
+import { CsModule } from './api/cs/cs.module';
 import { AuthModule } from './api/auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CartModule } from './api/cart/cart.module';
@@ -26,7 +26,7 @@ import { AccountModule } from './api/account/account.module';
     }),
     GraphqlModule,
     ProductModule,
-    UserModule,
+    CsModule,
     AuthModule,
     CartModule,
     JwtConfigModule,

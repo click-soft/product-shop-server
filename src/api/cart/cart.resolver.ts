@@ -30,7 +30,7 @@ export default class CartResolver {
   }
 
   @UseGuards(GqlAuthGuard)
-  @Query(() => Cart)
+  @Query(() => Cart, { nullable: true })
   async getCartWithProduct(@GetGqlUser() user: User) {
     return await this.cartService.getCartWithProduct(user.jisa, user.ykiho);
   }

@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { UserService } from '../user/user.service';
+import { CsService } from '../cs/cs.service';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
@@ -11,20 +11,20 @@ import { User } from './types/user';
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UserService,
+    private csService: CsService,
     private jwtService: JwtService,
     private configService: ConfigService,
     private readonly accountService: AccountService,
   ) { }
 
   async login(args: LoginArgs): Promise<TokenResult> {
-    const cs = await this.userService.getUser({ ykiho: args.ykiho, saupkiho: args.saupkiho });
-
-    if (!cs) {
-      throw new NotFoundException("사용자 정보가 존재하지 않음.")
+    const account = await this.accountService.verifyAccount(args);
+    if (!account) {
+      throw new NotFoundException("아이디 혹은 비밀번호를 확인하세요.")
     }
 
-    const payload = this.userService.convertCsToUser(cs);
+    const cs = await this.csService.getUser({ ykiho: account.ykiho, saupkiho: account.saupkiho });
+    const payload = this.csService.convertCsToUser(cs);
 
     try {
       const accessToken = await this.createAccessToken(payload);

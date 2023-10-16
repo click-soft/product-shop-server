@@ -44,8 +44,7 @@ export default class Payment extends BaseEntity {
 
   @Field()
   @Column({ name: 'send_type' })
-  sendType: '결제대기' | '배송준비' | '배송중' | '배송완료';
-
+  sendType: '결제대기' | '주문확인' | '상품준비중' | '배송중' | '배송완료';
   @Field()
   @Column()
   cancel: boolean;
