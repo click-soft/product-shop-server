@@ -93,7 +93,6 @@ export class ProductService {
   }
 
   async saveProductByPayment(payment: Payment, paymentItems: PaymentItem[]) {
-    let product: Product;
     const products = paymentItems.map(item => {
       return Product.create({
         clCode: item.code,

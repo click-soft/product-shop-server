@@ -20,7 +20,7 @@ export class PaymentResolver {
     @Args("dto") dto: CheckoutInput,
     @GetGqlUser() user: User
   ) {
-    return await this.paymentService.checkout(dto, user.ykiho);
+    return await this.paymentService.checkout(dto, user.ykiho, user.isTest);
   }
 
   @UseGuards(GqlAuthGuard)
@@ -32,8 +32,9 @@ export class PaymentResolver {
   @UseGuards(GqlAuthGuard)
   @Mutation(() => CheckoutResult)
   async cancelOrder(
+    @GetGqlUser() user: User,
     @Args() args: CancelOrderArgs) {
-    return this.paymentService.cancelOrder(args.paymentId, args.paymentKey, args.cancelReason);
+    return this.paymentService.cancelOrder(args.paymentId, args.paymentKey, args.cancelReason, user.isTest);
   }
 
   // @UseGuards(GqlAuthGuard)
@@ -42,8 +43,12 @@ export class PaymentResolver {
     return await this.paymentService.getOrderCompleted(orderId);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => CheckoutResult)
-  async refundOrder(@Args() args: RefundOrderArgs) {
-    return await this.paymentService.refundOrder(args);
+  async refundOrder(
+    @GetGqlUser() user: User,
+    @Args() args: RefundOrderArgs
+  ) {
+    return await this.paymentService.refundOrder(args, user.isTest);
   }
 }

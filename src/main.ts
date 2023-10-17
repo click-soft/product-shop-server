@@ -14,8 +14,15 @@ async function bootstrap() {
     },
   }));
   app.enableCors({
-    origin: ['http://localhost:3001', 'https://localhost:3001', "https://www.click-soft.shop"], // 허용할 출처    
+    origin: [
+      'http://localhost:3001',
+      'https://localhost:3001',
+      'http://test.localhost:3001',
+      'https://test.localhost:3001',
+      "https://www.click-soft.shop",
+      "https://www.test.click-soft.shop"], // 허용할 출처    
     credentials: true,
+    exposedHeaders: ['X-Is-Test'],
   });
 
   await app.listen(3000);

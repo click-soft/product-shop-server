@@ -12,6 +12,7 @@ import { CheckoutInput } from './dto/checkout.input';
 import { CheckoutResult } from './types/checkout-result';
 import { RefundOrderArgs } from './dto/refund-order.args';
 import { ProductService } from '../product/product.service';
+import { getTossPaymentsSecretKey } from 'src/config/is-test.config';
 
 
 @Injectable()
@@ -72,8 +73,8 @@ export class PaymentService {
     return await this.paymentItemRepository.save(paymentItems);
   }
 
-  private getHeaders() {
-    const tossSecretKey = this.configService.get<string>("TOSS_PAYMENTS_SECRET_KEY")
+  private getHeaders(isTest: boolean) {
+    const tossSecretKey = getTossPaymentsSecretKey(isTest);
     const tossToken = Buffer.from(tossSecretKey + ":").toString('base64');
     const headers = {
       'Authorization': `Basic ${tossToken}`,
@@ -82,8 +83,8 @@ export class PaymentService {
     return headers;
   }
 
-  async checkout(dto: CheckoutInput, ykiho: string): Promise<CheckoutResult> {
-    const headers = this.getHeaders();
+  async checkout(dto: CheckoutInput, ykiho: string, isTest: boolean): Promise<CheckoutResult> {
+    const headers = this.getHeaders(isTest);
     const body = {
       paymentKey: dto.paymentKey,
       amount: dto.amount,
@@ -111,7 +112,7 @@ export class PaymentService {
       try {
         savedPayment = await this.savePayment({ ykiho, data, quantity: dto.quantity });
       } catch (err) {
-        await this.cancelToApi(dto.paymentKey, "결제오류 발생으로 인한 취소");
+        await this.cancelToApi(dto.paymentKey, "결제오류 발생으로 인한 취소", isTest);
         return {
           success: false,
           errorCode: "checkout error",
@@ -145,11 +146,11 @@ export class PaymentService {
   }
 
 
-  private async cancelToApi(paymentKey: string, cancelReason: string)
+  private async cancelToApi(paymentKey: string, cancelReason: string, isTest: boolean)
     : Promise<{ data?: any, errorMessage?: string }> {
     try {
       const url = this.getCancelUrl(paymentKey);
-      const headers = this.getHeaders();
+      const headers = this.getHeaders(isTest);
       headers['Idempotency-Key'] = 'SAAABPQbcqjEXiDL2';
       const body = { cancelReason }
       const response = await fetch(url, {
@@ -169,10 +170,10 @@ export class PaymentService {
     }
   }
 
-  private async refundToApi(payment: Payment, dto: RefundOrderArgs): Promise<{ data?: any, errorMessage?: string }> {
+  private async refundToApi(payment: Payment, dto: RefundOrderArgs, isTest: boolean): Promise<{ data?: any, errorMessage?: string }> {
     try {
       const url = this.getCancelUrl(payment.paymentKey);
-      const headers = this.getHeaders();
+      const headers = this.getHeaders(isTest);
       // headers['Idempotency-Key'] = 'SAAABPQbcqjEXiDL2';
       const body = {
         cancelReason: dto.cancelReason,
@@ -201,9 +202,9 @@ export class PaymentService {
     }
   }
 
-  async refundOrder(dto: RefundOrderArgs): Promise<CheckoutResult> {
+  async refundOrder(dto: RefundOrderArgs, isTest: boolean): Promise<CheckoutResult> {
     const payment = await this.paymentRepository.findOne({ where: { id: dto.paymentId } });
-    const result = await this.refundToApi(payment, dto);
+    const result = await this.refundToApi(payment, dto, isTest);
 
     if (result.errorMessage) {
       return {
@@ -217,8 +218,8 @@ export class PaymentService {
     }
   }
 
-  async cancelOrder(paymentId: number, paymentKey: string, cancelReason: string): Promise<CheckoutResult> {
-    const result = await this.cancelToApi(paymentKey, cancelReason)
+  async cancelOrder(paymentId: number, paymentKey: string, cancelReason: string, isTest: boolean): Promise<CheckoutResult> {
+    const result = await this.cancelToApi(paymentKey, cancelReason, isTest)
 
     if (result.data) {
       if (result.data.status === 'CANCELED') {

@@ -2,20 +2,22 @@ import { Field, Int, ObjectType } from "@nestjs/graphql";
 
 @ObjectType()
 export class User {
-  @Field(()=> String)
+  @Field(() => String)
   jisa?: string;
-  @Field(()=> String)
+  @Field(() => String)
   ykiho?: string;
-  @Field(()=> String)
+  @Field(() => String)
   saupkiho?: string;
-  @Field(()=> String)
+  @Field(() => String)
   name?: string;
-  @Field(()=> String)
+  @Field(() => String)
   ceoName?: string;
-  @Field(()=> Boolean)
+  @Field(() => Boolean)
   fitCherbang?: boolean;
-  @Field(()=> Boolean)
+  @Field(() => Boolean)
   fitYoungsu?: boolean;
-  @Field(()=> Int)
+  @Field(() => Int)
   exp?: number;
+  
+  isTest?: boolean;
 }
