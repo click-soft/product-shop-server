@@ -13,6 +13,10 @@ import { PaymentModule } from './api/payment/payment.module';
 import { WebHookModule } from './api/web-hook/web-hook.module';
 import { GraphqlModule } from './graphql/graphql.module';
 import { AccountModule } from './api/account/account.module';
+import { ProductListSubModule } from './api/product-list-sub/product-list-sub.module';
+import { ProductListModule } from './api/product-list/product-list.module';
+import { PaymentItemModule } from './api/payment-item/payment-item.module';
+import { ProductlogModule } from './api/productlog/productlog.module';
 
 @Module({
   imports: [
@@ -25,7 +29,6 @@ import { AccountModule } from './api/account/account.module';
       inject: [MySqlCpmConfigService],
     }),
     GraphqlModule,
-    ProductModule,
     CsModule,
     AuthModule,
     CartModule,
@@ -34,6 +37,11 @@ import { AccountModule } from './api/account/account.module';
     WebHookModule,
     GraphqlModule,
     AccountModule,
+    ProductModule,
+    ProductListModule,
+    ProductListSubModule,
+    PaymentItemModule,
+    ProductlogModule,
   ],
   controllers: [AppController],
   providers: [AppService],

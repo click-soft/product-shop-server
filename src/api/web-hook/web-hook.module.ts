@@ -9,10 +9,13 @@ import { ProductService } from '../product/product.service';
 import Product from 'src/entities/cpm/product.entity';
 import { ProductList } from 'src/entities/cpm/productlist.entity';
 import { ProductListSub } from 'src/entities/cpm/productlistsub.entity';
+import { PaymentItemService } from '../payment-item/payment-item.service';
+import ProductLog from 'src/entities/cpm/productlog.entity';
+import { ProductlogService } from '../productlog/productlog.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Payment, PaymentItem, Product, ProductList, ProductListSub])],
+  imports: [TypeOrmModule.forFeature([Payment, PaymentItem, Product, ProductList, ProductListSub, ProductLog])],
   controllers: [WebHookController],
-  providers: [WebHookService, PaymentService, ProductService]
+  providers: [WebHookService, PaymentService, ProductService, PaymentItemService, ProductlogService]
 })
 export class WebHookModule { }

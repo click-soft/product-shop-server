@@ -13,6 +13,7 @@ import { CheckoutResult } from './types/checkout-result';
 import { RefundOrderArgs } from './dto/refund-order.args';
 import { ProductService } from '../product/product.service';
 import { getTossPaymentsSecretKey } from 'src/config/is-test.config';
+import { PaymentItemService } from '../payment-item/payment-item.service';
 
 
 @Injectable()
@@ -24,8 +25,8 @@ export class PaymentService {
     private paymentRepository: Repository<Payment>,
     @InjectRepository(PaymentItem)
     private paymentItemRepository: Repository<PaymentItem>,
+    private paymentItemService: PaymentItemService,
     private productService: ProductService,
-    private configService: ConfigService,
   ) { }
 
   private getCancelUrl(paymentKey: string) {
@@ -202,6 +203,14 @@ export class PaymentService {
     }
   }
 
+  private async updateToCancel(paymentId: number) {
+    const result = await this.paymentRepository.update(paymentId, { cancel: true });
+    if (result.affected) {
+      const paymentItemIds = await this.paymentItemService.getPaymentItemIdsByPaymentId(paymentId);
+      await this.productService.deleteByPaymentItemId(...paymentItemIds);
+    }
+  }
+
   async refundOrder(dto: RefundOrderArgs, isTest: boolean): Promise<CheckoutResult> {
     const payment = await this.paymentRepository.findOne({ where: { id: dto.paymentId } });
     const result = await this.refundToApi(payment, dto, isTest);
@@ -213,7 +222,7 @@ export class PaymentService {
         errorMessage: result.errorMessage,
       }
     } else {
-      this.paymentRepository.update(dto.paymentId, { cancel: true })
+      await this.updateToCancel(dto.paymentId);
       return { success: true }
     }
   }
@@ -223,7 +232,7 @@ export class PaymentService {
 
     if (result.data) {
       if (result.data.status === 'CANCELED') {
-        this.paymentRepository.update(paymentId, { cancel: true })
+        await this.updateToCancel(paymentId);
         return { success: true }
       } else {
         return {

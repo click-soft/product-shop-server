@@ -1,11 +1,31 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
+import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @ObjectType()
-@Entity("product")
-export default class Product extends BaseEntity {
+@Entity("productlog")
+export default class ProductLog extends BaseEntity {
+  @Field()
+  @PrimaryGeneratedColumn({ name: 'pd_logauto' })
+  logAuto: number;
+  
+  @Field()
+  @CreateDateColumn({ type: 'datetime', name: 'pd_logdatetime' })
+  logDatetime: Date;
+
+  @Field()
+  @Column({ type: 'varchar', length: 1, name: 'pd_loggubun' })
+  logGubun: string;
+
+  @Field()
+  @Column({ type: 'varchar', length: 20, name: 'pd_loguser' })
+  logUser: string;
+
+  @Field()
+  @Column({ type: 'varchar', length: 30, name: 'pd_logcomputer' })
+  logComputer: string;
+
   @Field(() => Int)
-  @PrimaryGeneratedColumn({ type: 'int', name: 'pd_auto' })
+  @Column({ type: 'int', name: 'pd_auto' })
   auto: number;
 
   @Field()

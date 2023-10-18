@@ -1,16 +1,14 @@
-import { Args, Query, Resolver } from "@nestjs/graphql";
+import { Args, Int, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { ProductService } from "./product.service";
-import { ProductArgs } from "./dto/product.args";
-import { ProductsByBunryu } from "./types/products-by-bunryu";
-import { ProductListSub } from "src/entities/cpm/productlistsub.entity";
+import { DeleteResult } from "../_common/types/delete-result";
+import Product from "src/entities/cpm/product.entity";
 
-@Resolver(() => ProductListSub)
+@Resolver(() => Product)
 export default class ProductResolver {
   constructor(private productService: ProductService) { }
 
-  @Query(() => [ProductsByBunryu])
-  async getProductsBunryuList(
-    @Args() args: ProductArgs) {
-    return await this.productService.getAll(args);
+  @Mutation(() => DeleteResult)
+  async deleteProducts(@Args('ids', { type: () => [Int] }) ids: number[]) {
+    return await this.productService.delete(...ids);
   }
 }

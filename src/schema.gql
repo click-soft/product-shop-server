@@ -35,9 +35,9 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type ProductsByBunryu {
-  bunryu: String!
-  products: [ProductListSub!]!
+type DeleteResult {
+  raw: Any
+  affected: Int!
 }
 
 type PaymentItem {
@@ -75,6 +75,11 @@ type Payment {
   cancel: Boolean!
   paymentItems: [PaymentItem!]
   virtual: PaymentVirtual
+}
+
+type ProductsByBunryu {
+  bunryu: String!
+  products: [ProductListSub!]!
 }
 
 type CsType {
@@ -137,11 +142,6 @@ type Cart {
   cartItems: [CartItem!]!
 }
 
-type DeleteResult {
-  raw: Any
-  affected: Int!
-}
-
 type UpdateResult {
   raw: Any
   affected: Int!
@@ -161,7 +161,6 @@ type CheckoutResult {
 scalar Any
 
 type Query {
-  getProductsBunryuList(jisa: String!, bunryu: String): [ProductsByBunryu!]!
   getCs(ykiho: String, saupkiho: String): CsType!
   getUser: User!
   cartItemsCount: Int!
@@ -170,6 +169,8 @@ type Query {
   getPaymentWithItems: [Payment!]!
   getOrderCompleted(orderId: String!): Payment!
   getAccount(userId: String!): Account!
+  getProductsBunryuList(jisa: String!, bunryu: String): [ProductsByBunryu!]!
+  getPaymentItemById(id: Int!): PaymentItem!
 }
 
 type Mutation {
@@ -183,6 +184,8 @@ type Mutation {
   cancelOrder(paymentId: Int!, paymentKey: String!, cancelReason: String!): CheckoutResult!
   refundOrder(paymentId: Int!, cancelReason: String!, bank: String!, accountNumber: String!, holderName: String!): CheckoutResult!
   saveAccount(userId: String!, password: String!): Account!
+  deleteProducts(ids: [Int!]!): DeleteResult!
+  getPaymentItemIdsByPaymentId(paymentId: Int!): [Int!]
 }
 
 input CheckoutInput {

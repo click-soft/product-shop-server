@@ -6,6 +6,7 @@ import { CartItem, CartItem as CartItemEntity } from 'src/entities/cpm/cart-item
 import { ProductService } from '../product/product.service';
 import { ProductListSub } from 'src/entities/cpm/productlistsub.entity';
 import CartItemArgs from './dto/cart-item.args';
+import { ProductListSubService } from '../product-list-sub/product-list-sub.service';
 
 @Injectable()
 export class CartService {
@@ -14,7 +15,7 @@ export class CartService {
     private cartRepository: Repository<Cart>,
     @InjectRepository(CartItem)
     private cartItemRepository: Repository<CartItem>,
-    private productService: ProductService
+    private productListSubService: ProductListSubService
   ) { }
 
   async getCart(ykiho: string): Promise<Cart> {
@@ -25,7 +26,7 @@ export class CartService {
 
   async getCartWithProduct(jisa: string, ykiho: string) {
     const cart = await this.getCart(ykiho);
-    const products: ProductListSub[] = await this.productService.getLatestProducts();
+    const products: ProductListSub[] = await this.productListSubService.getLatestProducts();
 
     cart?.cartItems?.forEach(ci => {
       const product = products.find(p => p.jisa === jisa && p.smCode === ci.code)
