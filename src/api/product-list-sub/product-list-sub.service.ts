@@ -73,4 +73,13 @@ export class ProductListSubService {
 
     return lastestPrds;
   }
+
+
+  async findOneByCode(jisa: string, smCode: string, ymd: string): Promise<ProductListSub> {
+    return await this.productListSubRepository.createQueryBuilder()
+      .where("pls_jisa = :jisa AND pls_smcode = :smCode", { jisa, smCode })
+      .andWhere("pls_smYmd <= :ymd", { ymd })
+      .orderBy("pls_smymd", 'DESC')
+      .getOne();
+  }
 }

@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
+import { Cs } from './cs.entity';
 
 @ObjectType()
 @Entity("product")
@@ -11,6 +12,10 @@ export default class Product extends BaseEntity {
   @Field()
   @Column({ type: 'varchar', length: 20, name: 'pd_clcode' })
   clCode: string;
+
+  @Field()
+  @Column({ type: 'varchar', length: 3, name: 'pd_jisa' })
+  jisa: string;
 
   @Field()
   @Column({ type: 'varchar', length: 20, name: 'pd_cscode' })

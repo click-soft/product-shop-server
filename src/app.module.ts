@@ -17,6 +17,7 @@ import { ProductListSubModule } from './api/product-list-sub/product-list-sub.mo
 import { ProductListModule } from './api/product-list/product-list.module';
 import { PaymentItemModule } from './api/payment-item/payment-item.module';
 import { ProductlogModule } from './api/productlog/productlog.module';
+import { EmModule } from './api/em/em.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { ProductlogModule } from './api/productlog/productlog.module';
     ProductListSubModule,
     PaymentItemModule,
     ProductlogModule,
+    EmModule,
   ],
   controllers: [AppController],
   providers: [AppService],

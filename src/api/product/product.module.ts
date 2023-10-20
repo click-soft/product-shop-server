@@ -11,15 +11,21 @@ import { ProductListService } from '../product-list/product-list.service';
 import { ProductListSubService } from '../product-list-sub/product-list-sub.service';
 import ProductLog from 'src/entities/cpm/productlog.entity';
 import { ProductlogService } from '../productlog/productlog.service';
+import { Cs } from 'src/entities/cpm/cs.entity';
+import { CsService } from '../cs/cs.service';
+import { JwtService } from '@nestjs/jwt';
+import { Em } from 'src/entities/cpm/em.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      Product, ProductList, ProductListSub, Payment, PaymentItem, ProductLog
+      Cs, Em, Product, ProductList, ProductListSub, Payment, PaymentItem, ProductLog
     ])
   ],
   providers: [
-    ProductResolver, ProductService, ProductListService, ProductListSubService, ProductlogService
+    ProductResolver, ProductService,
+    ProductListService, ProductListSubService,
+    ProductlogService, CsService, JwtService
   ],
   exports: [ProductService],
 })

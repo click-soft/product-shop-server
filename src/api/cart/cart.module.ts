@@ -13,12 +13,15 @@ import { ProductListService } from '../product-list/product-list.service';
 import { ProductListSubService } from '../product-list-sub/product-list-sub.service';
 import { ProductlogService } from '../productlog/productlog.service';
 import ProductLog from 'src/entities/cpm/productlog.entity';
+import { CsService } from '../cs/cs.service';
+import { Cs } from 'src/entities/cpm/cs.entity';
+import { Em } from 'src/entities/cpm/em.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Cart, CartItem, Product, ProductList, ProductListSub, ProductLog]),
+    TypeOrmModule.forFeature([Cs, Cart, CartItem, Product, ProductList, ProductListSub, ProductLog]),
     JwtConfigModule
   ],
-  providers: [CartService, CartResolver, ProductService, ProductListService, ProductListSubService, ProductlogService],
+  providers: [CartService, CartResolver, ProductService, ProductListService, ProductListSubService, ProductlogService, CsService],
 })
 export class CartModule { }

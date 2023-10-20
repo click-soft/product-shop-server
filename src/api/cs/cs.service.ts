@@ -37,6 +37,20 @@ export class CsService {
     return result;
   }
 
+  async findByYkiho(ykiho: string): Promise<Cs> {
+    return this.csRepository.findOne({ where: { gubun: "001", code: ykiho } })
+  }
+
+  async getYkihosByEmCode(emCode: string): Promise<string[]> {
+    const result = await this.csRepository.createQueryBuilder()
+      .select("cs_code code")
+      .where("cs_emcode = :emCode", { emCode })
+      .andWhere("(cs_lymd = '' OR cs_lymd > DATE_FORMAT(now(), '%Y%m%d'))")
+      .getRawMany<{ code: string }>();
+
+    return result?.map(cs => cs.code);
+  }
+
   convertCsToUser(cs: Cs): User {
     return {
       jisa: cs.gubun,

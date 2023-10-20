@@ -104,8 +104,8 @@ export class PaymentService {
       errorCode: data.code,
       errorMessage: data.message,
       method: data.method,
-      requestedAt: new Date(data.requestedAt),
-      approvedAt: new Date(data.approvedAt),
+      requestedAt: data.requestedAt ? new Date(data.requestedAt) : undefined,
+      approvedAt: data.requestedAt ? new Date(data.approvedAt) : undefined,
     };
 
     if (result.success) {

@@ -2,6 +2,175 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Product {
+  auto: Int!
+  clCode: String!
+  jisa: String!
+  csCode: String!
+  ctTel: String!
+  count: Float!
+  receive: String!
+  receiveYmd: String!
+  sell: String!
+  sellYmd: String!
+  orderCheck: String!
+  seller: String!
+  check: String!
+  check2: String!
+  rgb: String!
+  bigo: String!
+  createDt: DateTime!
+  bigo2: String
+  etc1: String
+  etc2: String
+  etc3: String
+  etc4: String
+  etc5: String
+  web: Boolean!
+  webPaymentItemId: Float!
+  cs: Cs
+  productListSub: ProductListSub
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Cs {
+  gubun: String
+  code: String
+  myung: String
+  daepyo: String
+  tel: String
+  fax: String
+  post: String
+  dup: Float
+  juso: String
+  bunji: String
+  jisa: String
+  emCode: String
+  damdang: String
+  damdanghp: String
+  jongbl: String
+  upte: String
+  saupnum: String
+  sauppost: String
+  saupdup: Float
+  saupjuso: String
+  saupbunji: String
+  email: String
+  ediid: String
+  edipassword: String
+  local: String
+  nonchart: String
+  fymd: String
+  lymd: String
+  bigo: String
+  user: String
+  etc1: String
+  etc2: String
+  etc3: String
+  Chonguser: String
+  pro: String
+  yanghan: String
+  chunggu: String
+  cherbang: String
+  youngsu: String
+  pacs: String
+  barcode: String
+  yakguk: String
+  update: String
+  askumak: Float
+  etc4: String
+  etc5: String
+  etc6: String
+  etc7: String
+  cms: String
+  daegidisp: String
+  gumjinlink: String
+  capture: String
+  sutak: String
+  sutaklink: String
+  gumsalinkyn: String
+  gumsalink: String
+  scaner: String
+  card: String
+  cardlink: String
+  eleccherban: String
+  yakgukprint: String
+  gumsabarcod: String
+  bdbarcode: String
+  updatepath: String
+  server: String
+  sanjae: String
+  paljji: String
+  jungji: String
+  servermodel: String
+  servername: String
+  serverSN: String
+  serverMT: String
+  serverHDD: String
+  serverMemor: String
+  serverLocat: String
+  serversetup: String
+  window: String
+  windowmemo: String
+  virusname: String
+  virussetup: String
+  virusend: String
+  upsname: String
+  upssetup: String
+  upsend: String
+  rollprint: String
+  inuser: String
+  upuser: String
+  indate: String
+  update2: String
+  etc8: String
+  etc9: String
+  etc10: String
+  etc11: String
+  etc12: String
+  etc13: String
+  etc14: String
+  etc15: String
+  bogubun: String
+  aschk: String
+  etc16: String
+  etc17: String
+  etc18: String
+  etc19: String
+  etc20: String
+  etc21: String
+  etc22: String
+  etc23: String
+  etc24: String
+  etc25: String
+  etc26: String
+  etc27: String
+  etc28: String
+  etc29: String
+  etc30: String
+  etc31: String
+  etc32: String
+  etc33: String
+  etc34: String
+  etc35: String
+  server_cust: String
+  server_orde: String
+  server_mici: String
+  server_admi: String
+  server_svrp: String
+  server_svrb: String
+  oauthpwd: String
+  medi_use: String
+  medi_pc: String
+  medi_autoju: String
+  medi_grname: String
+  em: Em!
+}
+
 type ProductListSub {
   auto: Float
   jisa: String
@@ -30,14 +199,14 @@ type ProductList {
   productListSub: ProductListSub!
 }
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
 type DeleteResult {
   raw: Any
   affected: Int!
+}
+
+type ProductsByBunryu {
+  bunryu: String!
+  products: [ProductListSub!]!
 }
 
 type PaymentItem {
@@ -77,9 +246,9 @@ type Payment {
   virtual: PaymentVirtual
 }
 
-type ProductsByBunryu {
-  bunryu: String!
-  products: [ProductListSub!]!
+type Em {
+  code: String
+  name: String
 }
 
 type CsType {
@@ -169,8 +338,10 @@ type Query {
   getPaymentWithItems: [Payment!]!
   getOrderCompleted(orderId: String!): Payment!
   getAccount(userId: String!): Account!
+  getAdminProducts(startYmd: String!, endYmd: String!, emCode: String): [Product!]!
   getProductsBunryuList(jisa: String!, bunryu: String): [ProductsByBunryu!]!
   getPaymentItemById(id: Int!): PaymentItem!
+  getManagers: [Em!]!
 }
 
 type Mutation {

@@ -13,13 +13,15 @@ import { ProductService } from '../product/product.service';
 import { PaymentItemService } from '../payment-item/payment-item.service';
 import { ProductlogService } from '../productlog/productlog.service';
 import ProductLog from 'src/entities/cpm/productlog.entity';
+import { CsService } from '../cs/cs.service';
+import { Cs } from 'src/entities/cpm/cs.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Payment, PaymentItem, Product, ProductList, ProductListSub, ProductLog]),
+    TypeOrmModule.forFeature([Cs, Payment, PaymentItem, Product, ProductList, ProductListSub, ProductLog]),
     JwtConfigModule
   ],
-  providers: [PaymentResolver, PaymentService, ProductListService, ProductService, PaymentItemService, ProductlogService],
+  providers: [PaymentResolver, PaymentService, ProductListService, ProductService, PaymentItemService, ProductlogService, CsService],
   exports: [PaymentService],
 })
 export class PaymentModule { }
