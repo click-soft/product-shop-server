@@ -18,6 +18,7 @@ import { ProductListModule } from './api/product-list/product-list.module';
 import { PaymentItemModule } from './api/payment-item/payment-item.module';
 import { ProductlogModule } from './api/productlog/productlog.module';
 import { EmModule } from './api/em/em.module';
+import { SocketIoModule } from './socket.io/socket.io.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { EmModule } from './api/em/em.module';
     PaymentItemModule,
     ProductlogModule,
     EmModule,
+    SocketIoModule,
   ],
   controllers: [AppController],
   providers: [AppService],

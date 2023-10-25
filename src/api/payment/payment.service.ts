@@ -19,6 +19,7 @@ import GetAdminPaymentsArgs from './dto/get-admin-payments.args';
 import { format } from 'date-fns';
 import GetPaymentWithItems from './dto/get-payment-with-items.args';
 import PaymentsWithPage from './types/payments-with-page';
+import { OrdersGateway } from 'src/socket.io/orders.gateway';
 
 @Injectable()
 export class PaymentService {
@@ -32,6 +33,7 @@ export class PaymentService {
     private paymentItemService: PaymentItemService,
     private productService: ProductService,
     private csService: CsService,
+    private ordersGateway: OrdersGateway,
   ) { }
 
   private getCancelUrl(paymentKey: string) {
@@ -56,7 +58,7 @@ export class PaymentService {
     return payment;
   }
 
-  private async savePaymentVirtual(paymentId: number, virt: VirtualAccount) {
+  private async savePaymentVirtual(paymentId: number, virt: VirtualAccount): Promise<PaymentVirtual> {
     const pmVirt = PaymentVirtual.create({
       paymentId,
       bankCode: virt.bankCode,
@@ -65,7 +67,7 @@ export class PaymentService {
       accountNumber: virt.accountNumber,
     });
 
-    await pmVirt.save();
+    return await pmVirt.save();
   }
 
   private async savePaymentItems(paymentId: number, items: CheckoutCartItemInput[]): Promise<PaymentItem[]> {
@@ -131,6 +133,7 @@ export class PaymentService {
           await this.savePaymentVirtual(savedPayment.id, data.virtualAccount);
         }
         this.productService.saveProductByPayment(savedPayment, paymentItems);
+        this.ordersGateway.sendToClients({ state: 'checkout' });
       }
     }
 
@@ -324,7 +327,7 @@ export class PaymentService {
     };
   }
 
-  async doneVirtualAccount(result: WebHookResult): Promise<Payment | { message: { message: string } }> {
+  async doneVirtualAccount(result: WebHookResult): Promise<Payment> {
     try {
       const payment = await this.paymentRepository.findOne({ where: { orderId: result.orderId } })
       if (payment?.sendType === "결제대기") {
@@ -332,10 +335,9 @@ export class PaymentService {
         payment.approvedAt = result.createdAt;
         return await payment.save();
       }
-    } catch (err) {
-      return {
-        message: err.message
-      }
+      return payment;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 }

@@ -15,13 +15,14 @@ import { ProductlogService } from '../productlog/productlog.service';
 import ProductLog from 'src/entities/cpm/productlog.entity';
 import { CsService } from '../cs/cs.service';
 import { Cs } from 'src/entities/cpm/cs.entity';
+import { OrdersGateway } from 'src/socket.io/orders.gateway';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Cs, Payment, PaymentItem, Product, ProductList, ProductListSub, ProductLog]),
     JwtConfigModule
   ],
-  providers: [PaymentResolver, PaymentService, ProductListService, ProductService, PaymentItemService, ProductlogService, CsService],
+  providers: [PaymentResolver, PaymentService, ProductListService, ProductService, PaymentItemService, ProductlogService, CsService, OrdersGateway],
   exports: [PaymentService],
 })
 export class PaymentModule { }

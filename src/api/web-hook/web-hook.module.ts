@@ -15,10 +15,11 @@ import { ProductlogService } from '../productlog/productlog.service';
 import { CsService } from '../cs/cs.service';
 import { Cs } from 'src/entities/cpm/cs.entity';
 import { Em } from 'src/entities/cpm/em.entity';
+import { OrdersGateway } from 'src/socket.io/orders.gateway';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Cs, Em, Payment, PaymentItem, Product, ProductList, ProductListSub, ProductLog])],
   controllers: [WebHookController],
-  providers: [WebHookService, PaymentService, ProductService, PaymentItemService, ProductlogService, CsService]
+  providers: [WebHookService, PaymentService, ProductService, PaymentItemService, ProductlogService, CsService, OrdersGateway]
 })
 export class WebHookModule { }
