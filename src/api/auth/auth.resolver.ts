@@ -26,7 +26,7 @@ export default class AuthResolver {
     const result = await this.authService.login(args);
     return result;
   }
-
+  
   @UseGuards(GqlAuthGuard)
   @Mutation(() => MessageResult)
   async logout(@GetGqlUser() user: User) {

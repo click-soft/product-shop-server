@@ -16,8 +16,10 @@ export class User {
   fitCherbang?: boolean;
   @Field(() => Boolean)
   fitYoungsu?: boolean;
+  @Field(() => Boolean, { nullable: true })
+  admin?: boolean
   @Field(() => Int)
   exp?: number;
-  
+
   isTest?: boolean;
 }

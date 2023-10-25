@@ -33,6 +33,10 @@ export class Account extends BaseEntity {
   expiryDate?: Date | null;
 
   @Field({ nullable: true })
+  @Column({ name: "admin", type: 'boolean', nullable: true })
+  admin?: boolean;
+
+  @Field({ nullable: true })
   @Column({ name: "created_at", type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 

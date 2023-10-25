@@ -24,7 +24,7 @@ export class AuthService {
     }
 
     const cs = await this.csService.getUser({ ykiho: account.ykiho, saupkiho: account.saupkiho });
-    const payload = this.csService.convertCsToUser(cs);
+    const payload = this.csService.convertCsToUser({ cs: cs, admin: account.admin });
 
     try {
       const accessToken = await this.createAccessToken(payload);
@@ -35,6 +35,7 @@ export class AuthService {
       return {
         accessToken,
         usr: payload.ykiho,
+        admin: payload.admin,
       }
     } catch (err) {
       throw new UnauthorizedException()

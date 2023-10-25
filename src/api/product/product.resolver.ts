@@ -13,6 +13,9 @@ import { GqlAuthGuard } from "../auth/gql.auth.guard";
 import { UseGuards } from "@nestjs/common";
 import { GetGqlUser } from "src/decorators/get-user";
 import { User } from "../auth/types/user";
+import { UpdateResult } from "typeorm";
+import { UpdateProductArgs } from "./dto/updateProduct.Args";
+import ProductsWithPage from "./types/products-with-page";
 
 @Resolver(() => Product)
 export default class ProductResolver {
@@ -27,10 +30,15 @@ export default class ProductResolver {
     return await this.productService.delete(...ids);
   }
 
+  @Mutation(() => Product)
+  async updateProduct(@Args() args: UpdateProductArgs) {
+    return await this.productService.update(args);
+  }
+
   // @UseGuards(GqlAuthGuard)
-  @Query(() => [Product])
+  @Query(() => ProductsWithPage)
   async getAdminProducts(@Args() args: GetAdminProductsArgs) {
-    return await this.productService.find(args);    
+    return await this.productService.find(args);
   }
 
   @ResolveField(() => Cs, { nullable: true })

@@ -209,6 +209,12 @@ type ProductsByBunryu {
   products: [ProductListSub!]!
 }
 
+type ProductsWithPage {
+  page: Int!
+  isLast: Boolean!
+  products: [Product!]!
+}
+
 type PaymentItem {
   id: Float!
   paymentId: Float!
@@ -244,6 +250,7 @@ type Payment {
   cancel: Boolean!
   paymentItems: [PaymentItem!]
   virtual: PaymentVirtual
+  cs: Cs!
 }
 
 type Em {
@@ -269,6 +276,7 @@ type Account {
   saupkiho: String
   token: String
   expiryDate: DateTime
+  admin: Boolean
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -281,6 +289,7 @@ type User {
   ceoName: String!
   fitCherbang: Boolean!
   fitYoungsu: Boolean!
+  admin: Boolean
   exp: Int!
 }
 
@@ -291,6 +300,7 @@ type MessageResult {
 type TokenResult {
   accessToken: String
   usr: String
+  admin: Boolean
 }
 
 type CartItem {
@@ -326,6 +336,12 @@ type CheckoutResult {
   approvedAt: DateTime
 }
 
+type PaymentWithPage {
+  page: Int!
+  isLast: Boolean!
+  payments: [Payment!]!
+}
+
 """Any scalar type"""
 scalar Any
 
@@ -335,10 +351,11 @@ type Query {
   cartItemsCount: Int!
   getCart: Cart!
   getCartWithProduct: Cart
-  getPaymentWithItems: [Payment!]!
+  getPaymentWithItems(page: Int!): PaymentWithPage!
+  getAdminPayments(jisa: String!, startDate: DateTime!, endDate: DateTime!, emCode: String, customerName: String, orderId: String, page: Int!): PaymentWithPage!
   getOrderCompleted(orderId: String!): Payment!
   getAccount(userId: String!): Account!
-  getAdminProducts(startYmd: String!, endYmd: String!, emCode: String): [Product!]!
+  getAdminProducts(startYmd: String!, endYmd: String!, emCode: String, csMyung: String, page: Int!): ProductsWithPage!
   getProductsBunryuList(jisa: String!, bunryu: String): [ProductsByBunryu!]!
   getPaymentItemById(id: Int!): PaymentItem!
   getManagers: [Em!]!
@@ -356,6 +373,7 @@ type Mutation {
   refundOrder(paymentId: Int!, cancelReason: String!, bank: String!, accountNumber: String!, holderName: String!): CheckoutResult!
   saveAccount(userId: String!, password: String!): Account!
   deleteProducts(ids: [Int!]!): DeleteResult!
+  updateProduct(auto: Int!, orderCheck: String, seller: String): Product!
   getPaymentItemIdsByPaymentId(paymentId: Int!): [Int!]
 }
 

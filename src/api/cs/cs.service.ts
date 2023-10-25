@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { ObjectLiteral, Repository } from 'typeorm';
 import { Cs } from '../../entities/cpm/cs.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../auth/types/user';
@@ -41,17 +41,29 @@ export class CsService {
     return this.csRepository.findOne({ where: { gubun: "001", code: ykiho } })
   }
 
-  async getYkihosByEmCode(emCode: string): Promise<string[]> {
+  private async getYCodesBase(whereQuery: { query: string, parameters?: ObjectLiteral }): Promise<string[]> {
     const result = await this.csRepository.createQueryBuilder()
       .select("cs_code code")
-      .where("cs_emcode = :emCode", { emCode })
+      .where(whereQuery.query, whereQuery.parameters)
       .andWhere("(cs_lymd = '' OR cs_lymd > DATE_FORMAT(now(), '%Y%m%d'))")
       .getRawMany<{ code: string }>();
 
     return result?.map(cs => cs.code);
   }
 
-  convertCsToUser(cs: Cs): User {
+  async getYkihosByEmCode(emCode: string): Promise<string[]> {
+    return await this.getYCodesBase({ query: "cs_emcode = :emCode", parameters: { emCode } })
+  }
+
+  async getYkihosByMyung(csMyung: string): Promise<string[]> {
+    return await this.getYCodesBase({ query: "cs_myung LIKE :csMyung", parameters: { csMyung: `%${csMyung}%` } })
+  }
+
+  async getYkihosByJisa(jisa: string): Promise<string[]> {
+    return await this.getYCodesBase({ query: "cs_jisa = :jisa", parameters: { jisa } })
+  }
+
+  convertCsToUser({ cs, admin }: { cs: Cs, admin?: boolean }): User {
     return {
       jisa: cs.gubun,
       ykiho: cs.code,
@@ -59,7 +71,8 @@ export class CsService {
       name: cs.myung,
       ceoName: cs.daepyo,
       fitCherbang: cs.cherbang === '4',
-      fitYoungsu: cs.youngsu === "4"
+      fitYoungsu: cs.youngsu === "4",
+      admin,
     }
   }
 }

@@ -1,4 +1,4 @@
-import { ArgsType, Field } from "@nestjs/graphql";
+import { ArgsType, Field, Int } from "@nestjs/graphql";
 
 @ArgsType()
 export default class GetAdminProductsArgs {
@@ -8,4 +8,9 @@ export default class GetAdminProductsArgs {
   endYmd: string;
   @Field({ nullable: true })
   emCode: string;
+  @Field({ nullable: true })
+  csMyung: string;
+
+  @Field(() => Int)
+  page: number;
 }

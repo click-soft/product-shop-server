@@ -6,7 +6,7 @@ import PaymentVirtual from 'src/entities/cpm/payment-virtual.entity';
 import Payment from 'src/entities/cpm/payment.entity';
 import WebHookResult from 'src/interfaces/WebHookResult';
 import VirtualAccount from 'src/interfaces/virtual-account';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CheckoutCartItemInput } from './dto/checkout-cart-item.input';
 import { CheckoutInput } from './dto/checkout.input';
 import { CheckoutResult } from './types/checkout-result';
@@ -14,6 +14,12 @@ import { RefundOrderArgs } from './dto/refund-order.args';
 import { ProductService } from '../product/product.service';
 import { getTossPaymentsSecretKey } from 'src/config/is-test.config';
 import { PaymentItemService } from '../payment-item/payment-item.service';
+import { CsService } from '../cs/cs.service';
+import GetAdminPaymentsArgs from './dto/get-admin-payments.args';
+import { format } from 'date-fns';
+import GetPaymentWithItems from './dto/get-payment-with-items.args';
+import PaymentsWithPage from './types/payment-with-page';
+import PaymentWithPage from './types/payment-with-page';
 
 
 @Injectable()
@@ -27,6 +33,7 @@ export class PaymentService {
     private paymentItemRepository: Repository<PaymentItem>,
     private paymentItemService: PaymentItemService,
     private productService: ProductService,
+    private csService: CsService,
   ) { }
 
   private getCancelUrl(paymentKey: string) {
@@ -132,7 +139,9 @@ export class PaymentService {
     return result;
   }
 
-  async getPaymentsWithItems(ykiho: string): Promise<Payment[]> {
+  async getPaymentsWithItems(ykiho: string, args: GetPaymentWithItems): Promise<PaymentsWithPage> {
+    const dispItemCount = 6;
+
     const payments: Payment[] = await this.paymentRepository.find({
       where: {
         ykiho
@@ -140,10 +149,16 @@ export class PaymentService {
       relations: ['paymentItems', 'virtual'],
       order: {
         id: 'DESC'
-      }
+      },
+      skip: dispItemCount * (args.page - 1),
+      take: dispItemCount,
     });
 
-    return payments;
+    return {
+      page: args.page,
+      isLast: payments.length < dispItemCount,
+      payments
+    };
   }
 
 
@@ -254,6 +269,61 @@ export class PaymentService {
     const response = await this.paymentRepository.findOne({ where: { orderId }, relations: ['virtual'] })
 
     return await response;
+  }
+
+  async getAdminPayments(args: GetAdminPaymentsArgs): Promise<PaymentWithPage> {
+    const dispCount = 6;
+
+    let ykihos = await this.csService.getYkihosByJisa(args.jisa);
+    if (ykihos.length === 0) {
+      throw new Error("거래처 등록이 되어있지 않습니다.");
+    }
+    if (args.emCode) {
+      ykihos = await this.csService.getYkihosByEmCode(args.emCode);
+    }
+    const startDateString = format(args.startDate, "yyyy-MM-dd HH:mm:ss");
+    const endDateString = format(args.endDate, "yyyy-MM-dd HH:mm:ss");
+
+    const query = this.paymentRepository.createQueryBuilder()
+      .leftJoinAndSelect("Payment.paymentItems", "paymentItems")
+      .leftJoinAndSelect("Payment.virtual", "virtual")
+    if (args.orderId) {
+      query.where("order_id = :orderId", { orderId: args.orderId })
+    } else {
+      query.where("ykiho IN (:...ykihos)", { ykihos })
+        .andWhere("requested_at >= :startDateString", { startDateString })
+        .andWhere("requested_at <= :endDateString", { endDateString })
+        .orderBy("Payment.id", 'DESC');
+
+      if (args.customerName) {
+        const ykihos = await this.csService.getYkihosByMyung(args.customerName);
+        if (ykihos.length === 0) {
+          return { page: 0, isLast: true, payments: [] };
+        }
+        query.andWhere("ykiho IN (:...ykihos)", { ykihos })
+      }
+    }
+
+    const payments: Payment[] = await query
+      .skip(dispCount * (args.page - 1))
+      .take(dispCount)
+      .getMany();
+
+    // const payments: Payment[] = await this.paymentRepository.find({
+    //   where: {
+    //     ykiho: In(ykihos)
+    //   },
+    //   relations: ['paymentItems', 'virtual'],
+    //   order: {
+    //     id: 'DESC'
+    //   }
+    // });
+
+    return {
+      page: args.page,
+      isLast: payments.length < dispCount,
+      payments,
+    };
   }
 
   async doneVirtualAccount(result: WebHookResult): Promise<Payment | { message: { message: string } }> {

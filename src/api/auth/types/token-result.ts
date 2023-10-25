@@ -7,4 +7,7 @@ export default class TokenResult {
 
   @Field({ nullable: true })
   usr?: string;
+
+  @Field({ nullable: true })
+  admin?: boolean;
 }
