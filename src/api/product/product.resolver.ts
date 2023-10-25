@@ -4,7 +4,7 @@ import { DeleteResult } from "../_common/types/delete-result";
 import Product from "src/entities/cpm/product.entity";
 import { ResolveField } from "@nestjs/graphql";
 import { Parent } from "@nestjs/graphql";
-import GetAdminProductsArgs from "./dto/getAdminProducts.args";
+import GetAdminProductsArgs from "./dto/get-admin-products.args";
 import { CsService } from "../cs/cs.service";
 import { Cs } from "src/entities/cpm/cs.entity";
 import { ProductListSub } from "src/entities/cpm/productlistsub.entity";
@@ -14,7 +14,7 @@ import { UseGuards } from "@nestjs/common";
 import { GetGqlUser } from "src/decorators/get-user";
 import { User } from "../auth/types/user";
 import { UpdateResult } from "typeorm";
-import { UpdateProductArgs } from "./dto/updateProduct.Args";
+import { UpdateProductArgs } from "./dto/update-product.args";
 import ProductsWithPage from "./types/products-with-page";
 
 @Resolver(() => Product)

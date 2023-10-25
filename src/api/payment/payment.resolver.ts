@@ -13,7 +13,7 @@ import GetAdminPaymentsArgs from './dto/get-admin-payments.args';
 import { Cs } from 'src/entities/cpm/cs.entity';
 import { CsService } from '../cs/cs.service';
 import GetPaymentWithItems from './dto/get-payment-with-items.args';
-import PaymentWithPage from './types/payment-with-page';
+import PaymentsWithPage from './types/payments-with-page';
 
 @Resolver(() => Payment)
 export class PaymentResolver {
@@ -31,13 +31,13 @@ export class PaymentResolver {
   }
 
   @UseGuards(GqlAuthGuard)
-  @Query(() => PaymentWithPage)
+  @Query(() => PaymentsWithPage)
   async getPaymentWithItems(@GetGqlUser() user: User, @Args() args: GetPaymentWithItems) {
     return await this.paymentService.getPaymentsWithItems(user.ykiho, args);
   }
 
   // @UseGuards(GqlAuthGuard)
-  @Query(() => PaymentWithPage)
+  @Query(() => PaymentsWithPage)
   async getAdminPayments(@Args() args: GetAdminPaymentsArgs) {
     return await this.paymentService.getAdminPayments(args);
   }

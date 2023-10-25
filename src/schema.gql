@@ -336,7 +336,7 @@ type CheckoutResult {
   approvedAt: DateTime
 }
 
-type PaymentWithPage {
+type PaymentsWithPage {
   page: Int!
   isLast: Boolean!
   payments: [Payment!]!
@@ -351,8 +351,8 @@ type Query {
   cartItemsCount: Int!
   getCart: Cart!
   getCartWithProduct: Cart
-  getPaymentWithItems(page: Int!): PaymentWithPage!
-  getAdminPayments(jisa: String!, startDate: DateTime!, endDate: DateTime!, emCode: String, customerName: String, orderId: String, page: Int!): PaymentWithPage!
+  getPaymentWithItems(page: Int!): PaymentsWithPage!
+  getAdminPayments(jisa: String!, startDate: DateTime!, endDate: DateTime!, emCode: String, customerName: String, orderId: String, page: Int!): PaymentsWithPage!
   getOrderCompleted(orderId: String!): Payment!
   getAccount(userId: String!): Account!
   getAdminProducts(startYmd: String!, endYmd: String!, emCode: String, csMyung: String, page: Int!): ProductsWithPage!

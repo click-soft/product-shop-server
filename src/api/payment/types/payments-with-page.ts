@@ -2,7 +2,7 @@ import { Field, Int, ObjectType } from "@nestjs/graphql";
 import Payment from "src/entities/cpm/payment.entity";
 
 @ObjectType()
-export default class PaymentWithPage {
+export default class PaymentsWithPage {
   @Field(() => Int)
   page: number;
 

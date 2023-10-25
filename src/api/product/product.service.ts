@@ -6,9 +6,9 @@ import Product from 'src/entities/cpm/product.entity';
 import Payment from 'src/entities/cpm/payment.entity';
 import * as moment from 'moment';
 import { ProductlogService } from '../productlog/productlog.service';
-import GetAdminProductsArgs from './dto/getAdminProducts.args';
+import GetAdminProductsArgs from './dto/get-admin-products.args';
 import { CsService } from '../cs/cs.service';
-import { UpdateProductArgs } from './dto/updateProduct.Args';
+import { UpdateProductArgs } from './dto/update-product.args';
 import ProductsWithPage from './types/products-with-page';
 @Injectable()
 export class ProductService {
