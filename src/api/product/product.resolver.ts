@@ -14,7 +14,7 @@ import { UseGuards } from "@nestjs/common";
 import { GetGqlUser } from "src/decorators/get-user";
 import { User } from "../auth/types/user";
 import { UpdateResult } from "typeorm";
-import { UpdateProductArgs } from "./dto/update-product.args";
+import { UpdateProductArgs } from "./dto/update-product.Args";
 import ProductsWithPage from "./types/products-with-page";
 
 @Resolver(() => Product)

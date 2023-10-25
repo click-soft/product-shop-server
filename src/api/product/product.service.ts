@@ -8,7 +8,7 @@ import * as moment from 'moment';
 import { ProductlogService } from '../productlog/productlog.service';
 import GetAdminProductsArgs from './dto/get-admin-products.args';
 import { CsService } from '../cs/cs.service';
-import { UpdateProductArgs } from './dto/update-product.args';
+import { UpdateProductArgs } from './dto/update-product.Args';
 import ProductsWithPage from './types/products-with-page';
 @Injectable()
 export class ProductService {
