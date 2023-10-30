@@ -17,7 +17,7 @@ import { PaymentItemService } from '../payment-item/payment-item.service';
 import { CsService } from '../cs/cs.service';
 import GetAdminPaymentsArgs from './dto/get-admin-payments.args';
 import { format } from 'date-fns';
-import GetPaymentWithItems from './dto/get-payment-with-items.args';
+import GetPaymentWithItemsArgs from './dto/get-payment-with-items.args';
 import PaymentsWithPage from './types/payments-with-page';
 import { OrdersGateway } from 'src/socket.io/orders.gateway';
 
@@ -140,7 +140,7 @@ export class PaymentService {
     return result;
   }
 
-  async getPaymentsWithItems(ykiho: string, args: GetPaymentWithItems): Promise<PaymentsWithPage> {
+  async getPaymentsWithItems(ykiho: string, args: GetPaymentWithItemsArgs): Promise<PaymentsWithPage> {
     const dispItemCount = 6;
 
     const payments: Payment[] = await this.paymentRepository.find({

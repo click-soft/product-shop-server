@@ -224,6 +224,7 @@ type PaymentItem {
   quantity: Float!
   amount: Float!
   payment: Payment!
+  product: Product
 }
 
 type PaymentVirtual {
