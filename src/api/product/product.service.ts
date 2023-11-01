@@ -9,12 +9,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import PaymentItem from 'src/entities/cpm/payment-item.entity';
 import Product from 'src/entities/cpm/product.entity';
 import Payment from 'src/entities/cpm/payment.entity';
-import * as moment from 'moment';
 import { ProductlogService } from '../productlog/productlog.service';
 import GetAdminProductsArgs from './dto/get-admin-products.args';
 import { CsService } from '../cs/cs.service';
 import { UpdateProductArgs } from './dto/update-product.args';
 import ProductsWithPage from './types/products-with-page';
+import * as dayjs from 'dayjs';
 @Injectable()
 export class ProductService {
   constructor(
@@ -32,7 +32,7 @@ export class ProductService {
         ctTel: '',
         count: item.quantity,
         receive: '000',
-        receiveYmd: moment(payment.requestedAt).format('YYYYMMDD'),
+        receiveYmd: dayjs(payment.requestedAt).format('YYYYMMDD'),
         sell: '0',
         check: '0',
         check2: '1',
