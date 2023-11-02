@@ -1,21 +1,13 @@
 import { Module } from '@nestjs/common';
-import { ProductlogService } from './productlog.service';
-import { ProductlogResolver } from './productlog.resolver';
-import { ProductService } from '../product/product.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import Product from 'src/entities/cpm/product.entity';
-import { ProductList } from 'src/entities/cpm/productlist.entity';
-import { ProductListSub } from 'src/entities/cpm/productlistsub.entity';
-import ProductLog from 'src/entities/cpm/productlog.entity';
-import PaymentItem from 'src/entities/cpm/payment-item.entity';
-import Payment from 'src/entities/cpm/payment.entity';
-import { CsService } from '../cs/cs.service';
-import { Em } from 'src/entities/cpm/em.entity';
-import { Cs } from 'src/entities/cpm/cs.entity';
+import { ProductlogService } from './services/productlog.service';
+import { OrmModule } from 'src/orm.module';
+import { CsService } from '../cs/services/cs.service';
+import { ProductService } from '../product/services/product.service';
+import { ProductlogResolver } from './resolvers/productlog.resolver';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Cs, Em ,Product, ProductList, ProductListSub, Payment, PaymentItem, ProductLog])],
+  imports: [OrmModule],
   providers: [ProductlogResolver, ProductlogService, ProductService, CsService],
-  exports: [ProductlogService]
+  exports: [ProductlogService],
 })
-export class ProductlogModule { }
+export class ProductlogModule {}

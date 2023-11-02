@@ -1,13 +1,12 @@
 import { Module } from '@nestjs/common';
-import { EmService } from './em.service';
-import { EmResolver } from './em.resolver';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Em } from 'src/entities/cpm/em.entity';
+import { EmResolver } from './resolvers/em.resolver';
 import { JwtService } from '@nestjs/jwt';
+import { OrmModule } from 'src/orm.module';
+import { EmService } from './services/em.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Em])],
+  imports: [OrmModule],
   providers: [EmResolver, EmService, JwtService],
-  exports: [EmService]
+  exports: [EmService],
 })
-export class EmModule { }
+export class EmModule {}

@@ -1,18 +1,12 @@
 import { Module } from '@nestjs/common';
-import { CsService } from './cs.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Cs } from '../../entities/cpm/cs.entity';
-import { CsResolver } from './cs.resolver';
-import { Em } from 'src/entities/cpm/em.entity';
-import { EmService } from '../em/em.service';
-
+import { OrmModule } from 'src/orm.module';
+import { CsService } from './services/cs.service';
+import { CsResolver } from './resolvers/cs.resolver';
+import { EmService } from '../em/services/em.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Cs, Em]),
-  ],
+  imports: [OrmModule],
   providers: [CsService, CsResolver, EmService],
-  exports: [CsService]
+  exports: [CsService],
 })
-
-export class CsModule { }
+export class CsModule {}

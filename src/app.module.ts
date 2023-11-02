@@ -19,6 +19,7 @@ import { PaymentItemModule } from './api/payment-item/payment-item.module';
 import { ProductlogModule } from './api/productlog/productlog.module';
 import { EmModule } from './api/em/em.module';
 import { SocketIoModule } from './socket.io/socket.io.module';
+import { PaymentVirtualModule } from './api/payment-virtual/payment-virtual.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { SocketIoModule } from './socket.io/socket.io.module';
     ProductlogModule,
     EmModule,
     SocketIoModule,
+    PaymentVirtualModule,
   ],
   controllers: [AppController],
   providers: [AppService],

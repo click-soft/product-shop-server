@@ -2,6 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type DeleteResult {
+  raw: Any
+  affected: Int!
+}
+
 type Product {
   auto: Int!
   clCode: String!
@@ -171,6 +176,18 @@ type Cs {
   em: Em!
 }
 
+type ProductList {
+  jisa: String!
+  smCode: String!
+  smYmd: String!
+  addUser: String!
+  createDt: DateTime!
+  bigo: String!
+  web: Boolean!
+  bunryu: String!
+  productListSub: ProductListSub!
+}
+
 type ProductListSub {
   auto: Float
   jisa: String
@@ -187,21 +204,10 @@ type ProductListSub {
   productList: [ProductList!]
 }
 
-type ProductList {
-  jisa: String!
-  smCode: String!
-  smYmd: String!
-  addUser: String!
-  createDt: DateTime!
-  bigo: String!
-  web: Boolean!
-  bunryu: String!
-  productListSub: ProductListSub!
-}
-
-type DeleteResult {
-  raw: Any
-  affected: Int!
+type ProductsWithPage {
+  page: Int!
+  isLast: Boolean!
+  products: [Product!]!
 }
 
 type ProductsByBunryu {
@@ -209,10 +215,27 @@ type ProductsByBunryu {
   products: [ProductListSub!]!
 }
 
-type ProductsWithPage {
-  page: Int!
-  isLast: Boolean!
-  products: [Product!]!
+type Em {
+  code: String
+  name: String
+}
+
+type Cart {
+  id: Int!
+  ykiho: String!
+  cartItems: [CartItem!]!
+}
+
+type CartItem {
+  id: Int!
+  cartId: Int!
+  code: String!
+  quantity: Int!
+  fit: Boolean!
+  createdDate: DateTime!
+  updatedDate: DateTime!
+  cart: Cart!
+  product: ProductListSub!
 }
 
 type PaymentItem {
@@ -254,21 +277,6 @@ type Payment {
   cs: Cs!
 }
 
-type Em {
-  code: String
-  name: String
-}
-
-type CsType {
-  gubun: String!
-  code: String!
-  myung: String!
-  daepyo: String!
-  saupnum: String!
-  youngsu: String!
-  cherbang: String!
-}
-
 type Account {
   id: Float!
   userId: String!
@@ -280,6 +288,16 @@ type Account {
   admin: Boolean
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+type CsType {
+  gubun: String!
+  code: String!
+  myung: String!
+  daepyo: String!
+  saupnum: String!
+  youngsu: String!
+  cherbang: String!
 }
 
 type User {
@@ -302,24 +320,6 @@ type TokenResult {
   accessToken: String
   usr: String
   admin: Boolean
-}
-
-type CartItem {
-  id: Int!
-  cartId: Int!
-  code: String!
-  quantity: Int!
-  fit: Boolean!
-  createdDate: DateTime!
-  updatedDate: DateTime!
-  cart: Cart!
-  product: ProductListSub!
-}
-
-type Cart {
-  id: Int!
-  ykiho: String!
-  cartItems: [CartItem!]!
 }
 
 type UpdateResult {
