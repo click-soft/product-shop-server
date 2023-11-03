@@ -10,6 +10,7 @@ import { ProductService } from '../product/services/product.service';
 import { PaymentItemService } from '../payment-item/services/payment-item.service';
 import { CsService } from '../cs/services/cs.service';
 import { PaymentVirtualService } from '../payment-virtual/services/payment-virtual.service';
+import { PaymentRefundService } from '../payment-refund/services/payment-refund.service';
 
 @Module({
   imports: [OrmModule, JwtConfigModule],
@@ -22,6 +23,7 @@ import { PaymentVirtualService } from '../payment-virtual/services/payment-virtu
     ProductlogService,
     CsService,
     PaymentVirtualService,
+    PaymentRefundService,
     OrdersGateway,
   ],
   exports: [PaymentService],

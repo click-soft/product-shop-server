@@ -4,7 +4,10 @@ import PaymentItem from 'src/entities/cpm/payment-item.entity';
 import Payment from 'src/entities/cpm/payment.entity';
 import WebHookArgs from 'src/api/web-hook/dto/web-hook.args';
 import { In, Repository } from 'typeorm';
-import { getTossPaymentsSecretKey } from 'src/config/is-test.config';
+import {
+  getTestCode,
+  getTossPaymentsSecretKey,
+} from 'src/config/is-test.config';
 import { format } from 'date-fns';
 import { OrdersGateway } from 'src/socket.io/orders.gateway';
 import { PaymentItemService } from 'src/api/payment-item/services/payment-item.service';
@@ -18,6 +21,9 @@ import PaymentsWithPage from '../types/payments-with-page';
 import { RefundOrderArgs } from '../dto/refund-order.args';
 import GetAdminPaymentsArgs from '../dto/get-admin-payments.args';
 import { PaymentVirtualService } from 'src/api/payment-virtual/services/payment-virtual.service';
+import { User } from 'src/api/auth/types/user';
+import { PaymentRefundService } from 'src/api/payment-refund/services/payment-refund.service';
+import TossRefundBody from 'src/api/_common/toss-payments/toss-refund-body';
 
 @Injectable()
 export class PaymentService {
@@ -32,6 +38,7 @@ export class PaymentService {
     private paymentItemService: PaymentItemService,
     private paymentVirtualService: PaymentVirtualService,
     private productService: ProductService,
+    private paymentRefundService: PaymentRefundService,
     private csService: CsService,
     private ordersGateway: OrdersGateway,
   ) {}
@@ -44,10 +51,12 @@ export class PaymentService {
     ykiho,
     data,
     quantity,
+    isTest,
   }: {
     ykiho: string;
     data: any;
     quantity: number;
+    isTest: boolean;
   }): Promise<Payment> {
     const payment = Payment.create({
       id: 0,
@@ -60,6 +69,7 @@ export class PaymentService {
       requestedAt: data.requestedAt,
       approvedAt: data.approvedAt,
       sendType: data.status === 'WAITING_FOR_DEPOSIT' ? '결제대기' : '주문확인',
+      test: getTestCode(isTest),
     });
     await this.paymentRepository.save(payment);
 
@@ -125,6 +135,7 @@ export class PaymentService {
           ykiho,
           data,
           quantity: dto.quantity,
+          isTest,
         });
       } catch (err) {
         await this.cancelToApi(
@@ -158,14 +169,16 @@ export class PaymentService {
   }
 
   async getPaymentsWithItems(
-    ykiho: string,
+    user: User,
     args: GetPaymentWithItemsArgs,
   ): Promise<PaymentsWithPage> {
     const dispItemCount = 6;
+    const { ykiho, isTest } = user;
 
     const payments: Payment[] = await this.paymentRepository.find({
       where: {
         ykiho,
+        test: getTestCode(isTest),
       },
       relations: ['paymentItems', 'virtual'],
       order: {
@@ -218,22 +231,29 @@ export class PaymentService {
       const url = this.getCancelUrl(payment.paymentKey);
       const headers = this.getHeaders(isTest);
       // headers['Idempotency-Key'] = 'SAAABPQbcqjEXiDL2';
-      const body = {
+
+      const refundBody: TossRefundBody = {
         cancelReason: dto.cancelReason,
-        cancelAccount: payment.amount,
+        cancelAmount: payment.amount,
         refundReceiveAccount: {
           bank: dto.bank,
           accountNumber: dto.accountNumber,
           holderName: dto.holderName,
         },
       };
+
       const response = await fetch(url, {
         method: 'POST',
         headers: headers,
-        body: JSON.stringify(body),
+        body: JSON.stringify(refundBody),
       });
 
       const data = await response.json();
+
+      if (data?.status === 'CANCELED') {
+        await this.paymentRefundService.save(payment.id, refundBody);
+      }
+
       return {
         data: data,
         errorMessage: data.message,

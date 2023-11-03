@@ -9,7 +9,7 @@ async function bootstrap() {
   app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe({
     exceptionFactory: (errors) => {
-      let messages = errors.map(error => Object.values(error.constraints)).join(', ');
+      let messages = errors.map(error => Object.values(error.constraints)).join('\n');
       return new BadRequestException(messages);
     },
   }));

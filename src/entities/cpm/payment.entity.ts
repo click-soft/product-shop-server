@@ -1,10 +1,17 @@
-import { BaseEntity, Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
-import PaymentItem from "./payment-item.entity";
-import PaymentVirtual from "./payment-virtual.entity";
-import { Field, ObjectType } from "@nestjs/graphql";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import PaymentItem from './payment-item.entity';
+import PaymentVirtual from './payment-virtual.entity';
+import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-@Entity("payment")
+@Entity('payment')
 export default class Payment extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
@@ -49,11 +56,15 @@ export default class Payment extends BaseEntity {
   @Column()
   cancel: boolean;
 
+  @Field({ nullable: true })
+  @Column()
+  test?: number;
+
   @Field(() => [PaymentItem], { nullable: true })
-  @OneToMany(() => PaymentItem, item => item.payment)
-  paymentItems: PaymentItem[]
+  @OneToMany(() => PaymentItem, (item) => item.payment)
+  paymentItems: PaymentItem[];
 
   @Field(() => PaymentVirtual, { nullable: true })
-  @OneToOne(() => PaymentVirtual, virt => virt.payment)
+  @OneToOne(() => PaymentVirtual, (virt) => virt.payment)
   virtual: PaymentVirtual;
 }

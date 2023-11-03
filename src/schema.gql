@@ -272,6 +272,7 @@ type Payment {
   approvedAt: DateTime
   sendType: String!
   cancel: Boolean!
+  test: Float
   paymentItems: [PaymentItem!]
   virtual: PaymentVirtual
   cs: Cs!

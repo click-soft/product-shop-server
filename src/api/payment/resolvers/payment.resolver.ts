@@ -41,7 +41,7 @@ export class PaymentResolver {
     @GetGqlUser() user: User,
     @Args() args: GetPaymentWithItemsArgs,
   ) {
-    return await this.paymentService.getPaymentsWithItems(user.ykiho, args);
+    return await this.paymentService.getPaymentsWithItems(user, args);
   }
 
   // @UseGuards(GqlAuthGuard)

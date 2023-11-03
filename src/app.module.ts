@@ -20,6 +20,7 @@ import { ProductlogModule } from './api/productlog/productlog.module';
 import { EmModule } from './api/em/em.module';
 import { SocketIoModule } from './socket.io/socket.io.module';
 import { PaymentVirtualModule } from './api/payment-virtual/payment-virtual.module';
+import { PaymentRefundModule } from './api/payment-refund/payment-refund.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { PaymentVirtualModule } from './api/payment-virtual/payment-virtual.modu
     EmModule,
     SocketIoModule,
     PaymentVirtualModule,
+    PaymentRefundModule,
   ],
   controllers: [AppController],
   providers: [AppService],

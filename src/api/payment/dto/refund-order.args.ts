@@ -1,15 +1,18 @@
-import { ArgsType, Field, Int } from "@nestjs/graphql";
+import { ArgsType, Field, Int } from '@nestjs/graphql';
+import { IsNotEmpty, IsNumberString } from 'class-validator';
 
 @ArgsType()
 export class RefundOrderArgs {
-  @Field(()=> Int)
+  @Field(() => Int)
   paymentId: number;
-  @Field(()=> String)
+  @Field(() => String)
   cancelReason: string;
-  @Field(()=> String)
+  @Field(() => String)
   bank: string;
-  @Field(()=> String)
+  @IsNumberString(null, { message: '계좌번호는 숫자로만 입력해주세요.' })
+  @Field(() => String)
   accountNumber: string;
-  @Field(()=> String)
+  @IsNotEmpty({ message: '예금주를 입력해주세요.' })
+  @Field(() => String)
   holderName: string;
 }
