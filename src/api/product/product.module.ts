@@ -7,6 +7,7 @@ import { ProductService } from './services/product.service';
 import { ProductListService } from '../product-list/services/product-list.service';
 import { ProductListSubService } from '../product-list-sub/services/product-list-sub.service';
 import { CsService } from '../cs/services/cs.service';
+import { PaymentItemService } from '../payment-item/services/payment-item.service';
 
 @Module({
   imports: [OrmModule],
@@ -16,6 +17,7 @@ import { CsService } from '../cs/services/cs.service';
     ProductListService,
     ProductListSubService,
     ProductlogService,
+    PaymentItemService,
     CsService,
     JwtService,
   ],

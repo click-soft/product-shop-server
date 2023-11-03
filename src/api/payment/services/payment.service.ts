@@ -26,7 +26,7 @@ import { PaymentRefundService } from 'src/api/payment-refund/services/payment-re
 import TossRefundBody from 'src/api/_common/toss-payments/toss-refund-body';
 
 @Injectable()
-export class PaymentService {
+export class PaymentService {  
   private readonly TOSS_PAYMENTS_URL =
     'https://api.tosspayments.com/v1/payments/confirm';
 
@@ -407,5 +407,5 @@ export class PaymentService {
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
-  }
+  } 
 }

@@ -7,7 +7,7 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { GetGqlUser } from 'src/decorators/get-user';
-import { UseGuards } from '@nestjs/common';
+import { Body, UseGuards, UsePipes } from '@nestjs/common';
 import Payment from 'src/entities/cpm/payment.entity';
 import { PaymentService } from '../services/payment.service';
 import { CsService } from 'src/api/cs/services/cs.service';
@@ -21,11 +21,14 @@ import GetAdminPaymentsArgs from '../dto/get-admin-payments.args';
 import CancelOrderArgs from '../dto/cancel-order.args';
 import { Cs } from 'src/entities/cpm/cs.entity';
 import { RefundOrderArgs } from '../dto/refund-order.args';
+import CancelOrderPipe from 'src/pipes/cancel-order.pipe';
+import { ProductService } from 'src/api/product/services/product.service';
 
 @Resolver(() => Payment)
 export class PaymentResolver {
   constructor(
     private paymentService: PaymentService,
+    private productService: ProductService,
     private csService: CsService,
   ) {}
 
@@ -52,7 +55,10 @@ export class PaymentResolver {
 
   @UseGuards(GqlAuthGuard)
   @Mutation(() => CheckoutResult)
-  async cancelOrder(@GetGqlUser() user: User, @Args() args: CancelOrderArgs) {
+  async cancelOrder(
+    @GetGqlUser() user: User,
+    @Args(CancelOrderPipe) args: CancelOrderArgs,
+  ) {
     return this.paymentService.cancelOrder(
       args.paymentId,
       args.paymentKey,
@@ -69,7 +75,10 @@ export class PaymentResolver {
 
   @UseGuards(GqlAuthGuard)
   @Mutation(() => CheckoutResult)
-  async refundOrder(@GetGqlUser() user: User, @Args() args: RefundOrderArgs) {
+  async refundOrder(
+    @GetGqlUser() user: User,
+    @Args(CancelOrderPipe) args: RefundOrderArgs,
+  ) {
     return await this.paymentService.refundOrder(args, user.isTest);
   }
 

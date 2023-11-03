@@ -15,6 +15,7 @@ import { CsService } from 'src/api/cs/services/cs.service';
 import ProductsWithPage from '../types/products-with-page';
 import GetAdminProductsArgs from '../dto/get-admin-products.args';
 import { UpdateProductArgs } from '../dto/update-product.args';
+import { PaymentItemService } from 'src/api/payment-item/services/payment-item.service';
 
 @Injectable()
 export class ProductService {
@@ -22,6 +23,7 @@ export class ProductService {
     @InjectRepository(Product)
     private productRepository: Repository<Product>,
     private productLogService: ProductlogService,
+    private paymentItemService: PaymentItemService,
     private csService: CsService,
   ) {}
 
@@ -169,5 +171,26 @@ export class ProductService {
       isLast: result.length < dispCount,
       products: result,
     };
+  }
+
+  async validCancelByPaymentId(paymentId: number) {
+    const ids = await this.paymentItemService.getPaymentItemIds(paymentId);
+
+    if (!ids) return true;
+
+    const products = await this.productRepository.find({
+      where: {
+        webPaymentItemId: In(ids),
+      },
+    });
+
+    let isOrdered = products.some((p) => p.etc1?.startsWith('1'));
+    if (!isOrdered) {
+      isOrdered = products.some(
+        (p) => p.orderCheck === '0' && p.bigo?.trim() !== '',
+      );
+    }
+
+    return !isOrdered;
   }
 }

@@ -7,20 +7,27 @@ import { Repository } from 'typeorm';
 export class PaymentItemService {
   constructor(
     @InjectRepository(PaymentItem)
-    private paymentItemRepository: Repository<PaymentItem>
-  ) {
-
-  }
+    private paymentItemRepository: Repository<PaymentItem>,
+  ) {}
   async getPaymentItemIdsByPaymentId(paymentId: number): Promise<number[]> {
     const result = await this.paymentItemRepository.find({
       select: { id: true },
-      where: { paymentId }
-    })
+      where: { paymentId },
+    });
 
-    return result?.map(p => p.id);
+    return result?.map((p) => p.id);
   }
 
   async getById(id: number): Promise<PaymentItem> {
-    return await this.paymentItemRepository.findOne({ where: { id } })
+    return await this.paymentItemRepository.findOne({ where: { id } });
+  }
+
+  async getPaymentItemIds(paymentId: number): Promise<number[]> {
+    const result = await this.paymentItemRepository.find({
+      select: { id: true },
+      where: { paymentId },
+    });
+
+    return result?.map((pi) => pi.id);
   }
 }

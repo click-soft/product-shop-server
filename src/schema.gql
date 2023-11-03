@@ -210,46 +210,6 @@ type ProductsWithPage {
   products: [Product!]!
 }
 
-type ProductsByBunryu {
-  bunryu: String!
-  products: [ProductListSub!]!
-}
-
-type Em {
-  code: String
-  name: String
-}
-
-type Cart {
-  id: Int!
-  ykiho: String!
-  cartItems: [CartItem!]!
-}
-
-type CartItem {
-  id: Int!
-  cartId: Int!
-  code: String!
-  quantity: Int!
-  fit: Boolean!
-  createdDate: DateTime!
-  updatedDate: DateTime!
-  cart: Cart!
-  product: ProductListSub!
-}
-
-type PaymentItem {
-  id: Float!
-  paymentId: Float!
-  code: String!
-  name: String!
-  fit: Boolean!
-  quantity: Float!
-  amount: Float!
-  payment: Payment!
-  product: Product
-}
-
 type PaymentVirtual {
   id: Float!
   paymentId: Float!
@@ -276,6 +236,46 @@ type Payment {
   paymentItems: [PaymentItem!]
   virtual: PaymentVirtual
   cs: Cs!
+}
+
+type PaymentItem {
+  id: Float!
+  paymentId: Float!
+  code: String!
+  name: String!
+  fit: Boolean!
+  quantity: Float!
+  amount: Float!
+  payment: Payment!
+  product: Product
+}
+
+type ProductsByBunryu {
+  bunryu: String!
+  products: [ProductListSub!]!
+}
+
+type Em {
+  code: String
+  name: String
+}
+
+type Cart {
+  id: Int!
+  ykiho: String!
+  cartItems: [CartItem!]!
+}
+
+type CartItem {
+  id: Int!
+  cartId: Int!
+  code: String!
+  quantity: Int!
+  fit: Boolean!
+  createdDate: DateTime!
+  updatedDate: DateTime!
+  cart: Cart!
+  product: ProductListSub!
 }
 
 type Account {
