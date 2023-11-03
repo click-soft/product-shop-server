@@ -24,6 +24,14 @@ export class AccountService {
     return await this.accountRepository.findOne({ where: { userId } });
   }
 
+  private getUserArgsById(id: string) {
+    switch (id.length) {
+      case 8:
+        return { ykiho: id };
+      case 10:
+        return { saupkiho: id };
+    }
+  }
   async saveAccount({ userId, password }: SaveAccountArgs): Promise<Account> {
     const savedAccount = await this.findOne(userId);
 
@@ -33,11 +41,11 @@ export class AccountService {
         HttpStatus.BAD_REQUEST,
       );
     }
-
-    const cs = await this.csService.getUser({ ykiho: userId });
+    const userArgs = this.getUserArgsById(userId);
+    const cs = await this.csService.getUser(userArgs);
     if (!cs) {
       throw new HttpException(
-        '요양기관 정보가 없습니다.',
+        '클릭소프트에 등록된 정보가 없습니다.',
         HttpStatus.BAD_REQUEST,
       );
     }

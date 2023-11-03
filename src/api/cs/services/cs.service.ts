@@ -30,7 +30,7 @@ export class CsService {
 
     const result = await this.csRepository.findOne({
       select: {
-        gubun: true,
+        jisa: true,
         code: true,
         myung: true,
         daepyo: true,
@@ -85,7 +85,7 @@ export class CsService {
 
   convertCsToUser({ cs, admin }: { cs: Cs; admin?: boolean }): User {
     return {
-      jisa: cs.gubun,
+      jisa: cs.jisa,
       ykiho: cs.code,
       saupkiho: cs.saupnum,
       name: cs.myung,
