@@ -1,5 +1,5 @@
-import { Field, Int, ObjectType } from "@nestjs/graphql";
-import { AnyScalar } from "../custom-scalar/any.scalar";
+import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { AnyScalar } from '../custom-scalar/any.scalar';
 
 @ObjectType()
 export class UpdateResult {
@@ -8,5 +8,5 @@ export class UpdateResult {
   @Field(() => Int)
   affected?: number;
   @Field(() => Object)
-  generatedMaps: Object;  
+  generatedMaps: Object;
 }

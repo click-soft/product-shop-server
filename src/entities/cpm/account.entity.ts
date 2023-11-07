@@ -1,5 +1,5 @@
-import { Field, ObjectType } from "@nestjs/graphql";
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Field, ObjectType } from '@nestjs/graphql';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @ObjectType()
 @Entity({ name: 'account' })
@@ -9,12 +9,16 @@ export class Account extends BaseEntity {
   id: number;
 
   @Field()
-  @Column({ name: "user_id", type: 'varchar', length: 30, nullable: false })
+  @Column({ name: 'user_id', type: 'varchar', length: 30, nullable: false })
   userId: string;
 
   @Field()
   @Column({ type: 'varchar', length: 255, nullable: false })
   password: string;
+
+  @Field()
+  @Column({ type: 'varchar', length: 50, nullable: false })
+  email: string;
 
   @Field({ nullable: true })
   @Column({ type: 'varchar', length: 8, nullable: true })
@@ -29,18 +33,27 @@ export class Account extends BaseEntity {
   token?: string | null;
 
   @Field({ nullable: true })
-  @Column({ name: "expiry_date", type: 'datetime', nullable: true })
+  @Column({ name: 'expiry_date', type: 'datetime', nullable: true })
   expiryDate?: Date | null;
 
   @Field({ nullable: true })
-  @Column({ name: "admin", type: 'boolean', nullable: true })
+  @Column({ name: 'admin', type: 'boolean', nullable: true })
   admin?: boolean;
 
   @Field({ nullable: true })
-  @Column({ name: "created_at", type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({
+    name: 'created_at',
+    type: 'datetime',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   createdAt: Date;
 
   @Field({ nullable: true })
-  @Column({ name: "updated_at", type: 'datetime', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
+  @Column({
+    name: 'updated_at',
+    type: 'datetime',
+    default: () => 'CURRENT_TIMESTAMP',
+    onUpdate: 'CURRENT_TIMESTAMP',
+  })
   updatedAt: Date;
 }

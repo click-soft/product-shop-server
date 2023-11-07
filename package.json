@@ -42,10 +42,13 @@
     "graphql": "^16.8.1",
     "moment": "^2.29.4",
     "mysql2": "^3.6.1",
+    "nodemailer": "^6.9.7",
+    "nodemailer-juice": "^1.0.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
     "ts-morph": "^19.0.0",
-    "typeorm": "^0.3.17"
+    "typeorm": "^0.3.17",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
@@ -57,7 +60,9 @@
     "@types/jest": "^29.5.2",
     "@types/moment": "^2.13.0",
     "@types/node": "^20.6.0",
+    "@types/nodemailer": "^6.4.13",
     "@types/supertest": "^2.0.12",
+    "@types/uuid": "^9.0.6",
     "@typescript-eslint/eslint-plugin": "^5.59.11",
     "@typescript-eslint/parser": "^5.59.11",
     "eslint": "^8.42.0",

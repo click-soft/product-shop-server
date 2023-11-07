@@ -1,5 +1,11 @@
 import { Field, ArgsType } from '@nestjs/graphql';
-import { IsNotEmpty, IsNumber, IsNumberString, Length } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsNumberString,
+  Length,
+} from 'class-validator';
 
 @ArgsType()
 export default class SaveAccountArgs {
@@ -11,4 +17,9 @@ export default class SaveAccountArgs {
   @IsNotEmpty()
   @Field()
   password: string;
+
+  @IsNotEmpty()
+  @IsEmail()
+  @Field()
+  email: string;
 }

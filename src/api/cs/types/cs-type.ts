@@ -3,7 +3,7 @@ import { Field, ObjectType } from "@nestjs/graphql";
 @ObjectType()
 export class CsType {
   @Field(()=> String)
-  gubun?: string;
+  jisa?: string;
   @Field(()=> String)
   code?: string;
   @Field(()=> String)
