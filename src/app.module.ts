@@ -21,6 +21,7 @@ import { EmModule } from './api/em/em.module';
 import { SocketIoModule } from './socket.io/socket.io.module';
 import { PaymentVirtualModule } from './api/payment-virtual/payment-virtual.module';
 import { PaymentRefundModule } from './api/payment-refund/payment-refund.module';
+import { AccountTempModule } from './api/account-temp/account-temp.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { PaymentRefundModule } from './api/payment-refund/payment-refund.module'
     SocketIoModule,
     PaymentVirtualModule,
     PaymentRefundModule,
+    AccountTempModule,
   ],
   controllers: [AppController],
   providers: [AppService],

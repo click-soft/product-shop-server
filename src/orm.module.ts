@@ -13,6 +13,7 @@ import { Account } from './entities/cpm/account.entity';
 import { Cart } from './entities/cpm/cart.entity';
 import PaymentVirtual from './entities/cpm/payment-virtual.entity';
 import PaymentRefund from './entities/cpm/payment-refund.entity';
+import { AccountTemp } from './entities/cpm/account-temp.entity';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import PaymentRefund from './entities/cpm/payment-refund.entity';
       PaymentItem,
       PaymentVirtual,
       PaymentRefund,
+      AccountTemp,
     ]),
   ],
   exports: [TypeOrmModule],

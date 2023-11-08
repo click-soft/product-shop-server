@@ -16,6 +16,7 @@ export class MySqlCpmConfigService implements TypeOrmOptionsFactory {
       database: 'cpm',
       entities: ['dist/src/entities/cpm/**/*.entity.{js,ts}'],
       synchronize: false,
+      charset: 'utf8mb4',
       timezone: 'Asia/Seoul',
       // logging: true,
     };

@@ -11,6 +11,7 @@ import { AccountService } from 'src/api/account/services/account.service';
 import TokenResult from '../types/token-result';
 import LoginArgs from 'src/api/_common/dto/login.args';
 import { User } from '../types/user';
+import { Account } from 'src/entities/cpm/account.entity';
 
 @Injectable()
 export class AuthService {
@@ -27,6 +28,10 @@ export class AuthService {
       throw new NotFoundException('아이디 혹은 비밀번호를 확인하세요.');
     }
 
+    return await this.createTokens(account);
+  }
+
+  async createTokens(account: Account) {
     const cs = await this.csService.getUser({
       ykiho: account.ykiho,
       saupkiho: account.saupkiho,
