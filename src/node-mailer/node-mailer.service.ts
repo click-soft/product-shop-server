@@ -37,7 +37,7 @@ export class NodeMailerService {
   }
 
   private async getHtml(args: ChangePasswordArgs) {
-    const url = `https://www.click-soft.shop/change-password?userId=${args.userId}&key=${args.token}`;
+    const url = `https://www.click-soft.shop/change-password?uid=${args.userId}&key=${args.token}`;
     const data = await promises.readFile(
       './src/node-mailer/change-password.html',
     );
