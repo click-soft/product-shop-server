@@ -6,6 +6,7 @@ import {
   IsNumberString,
   Length,
 } from 'class-validator';
+import { IsPassword } from 'src/validators/password.validator';
 
 @ArgsType()
 export default class SaveAccountArgs {
@@ -14,6 +15,7 @@ export default class SaveAccountArgs {
   @Field()
   userId: string;
 
+  @IsPassword()
   @IsNotEmpty()
   @Field()
   password: string;
