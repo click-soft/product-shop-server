@@ -5,34 +5,18 @@ import {
   ValidatorConstraintInterface,
   registerDecorator,
 } from 'class-validator';
+import { validPassword } from 'kbr-validator';
 
 @ValidatorConstraint({ async: false })
 export class PasswordValidator implements ValidatorConstraintInterface {
   validate(password: string) {
-    // Your password validation logic here
-    if (password.length < 8) {
-      throw new HttpException(
-        '비밀번호는 최소 8자 이상이어야 합니다.',
-        HttpStatus.BAD_REQUEST,
-      );
+    const { validate, errorMessage } = validPassword(password);
+
+    if (errorMessage) {
+      throw new HttpException(errorMessage, HttpStatus.BAD_REQUEST);
     }
 
-    const englishRegexp = /[a-zA-Z]/;
-    const specialRegexp = /[!@#$%^&*]/;
-    const numberRegexp = /\d/;
-    const regexpes = [englishRegexp, specialRegexp, numberRegexp];
-    const count = regexpes.reduce((acc, regexp) => {
-      return acc + (regexp.test(password) ? 1 : 0);
-    }, 0);
-
-    if (count < 3) {
-      throw new HttpException(
-        '비밀번호는 대문자, 소문자, 숫자, 특수 문자\n 중 3가지 이상을 포함해야 합니다.',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    return true;
+    return validate;
   }
 }
 
