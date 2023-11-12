@@ -36,10 +36,7 @@ export class AuthService {
       ykiho: account.ykiho,
       saupkiho: account.saupkiho,
     });
-    const payload = this.csService.convertCsToUser({
-      cs: cs,
-      admin: account.admin,
-    });
+    const payload = this.csService.convertCsToUser({ cs, account });
 
     try {
       const accessToken = await this.createAccessToken(payload);

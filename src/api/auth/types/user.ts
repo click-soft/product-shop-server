@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class User {
@@ -17,8 +17,12 @@ export class User {
   @Field(() => Boolean)
   fitYoungsu?: boolean;
   @Field(() => Boolean, { nullable: true })
-  admin?: boolean
-  @Field(() => Int)
+  admin?: boolean;
+  @Field(() => String, { nullable: true })
+  email?: string;
+  @Field(() => Boolean, { nullable: true })
+  useBNPL?: boolean;
+  @Field(() => Int, { nullable: true })
   exp?: number;
 
   isTest?: boolean;

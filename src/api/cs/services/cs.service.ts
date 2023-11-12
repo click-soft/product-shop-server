@@ -3,6 +3,7 @@ import { ObjectLiteral, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cs } from 'src/entities/cpm/cs.entity';
 import { User } from 'src/api/auth/types/user';
+import { Account } from 'src/entities/cpm/account.entity';
 
 @Injectable()
 export class CsService {
@@ -37,6 +38,7 @@ export class CsService {
         saupnum: true,
         youngsu: true,
         cherbang: true,
+        etc34: true,
       },
       where: [{ code: ykiho }, { saupnum: saupkiho }],
     });
@@ -83,7 +85,7 @@ export class CsService {
     });
   }
 
-  convertCsToUser({ cs, admin }: { cs: Cs; admin?: boolean }): User {
+  convertCsToUser({ cs, account }: { cs: Cs; account: Account }): User {
     return {
       jisa: cs.jisa,
       ykiho: cs.code,
@@ -92,7 +94,9 @@ export class CsService {
       ceoName: cs.daepyo,
       fitCherbang: cs.cherbang === '4',
       fitYoungsu: cs.youngsu === '4',
-      admin,
+      admin: account.admin,
+      email: account.email,
+      useBNPL: cs.etc34 === '1',
     };
   }
 }

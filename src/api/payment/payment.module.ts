@@ -11,6 +11,7 @@ import { PaymentItemService } from '../payment-item/services/payment-item.servic
 import { CsService } from '../cs/services/cs.service';
 import { PaymentVirtualService } from '../payment-virtual/services/payment-virtual.service';
 import { PaymentRefundService } from '../payment-refund/services/payment-refund.service';
+import PaymentManager from './module/payment-manager';
 
 @Module({
   imports: [OrmModule, JwtConfigModule],
@@ -25,6 +26,7 @@ import { PaymentRefundService } from '../payment-refund/services/payment-refund.
     PaymentVirtualService,
     PaymentRefundService,
     OrdersGateway,
+    PaymentManager,
   ],
   exports: [PaymentService],
 })

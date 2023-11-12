@@ -33,6 +33,7 @@ type Product {
   etc5: String
   web: Boolean!
   webPaymentItemId: Float!
+  webBNPL: Boolean!
   cs: Cs
   productListSub: ProductListSub
 }
@@ -311,7 +312,9 @@ type User {
   fitCherbang: Boolean!
   fitYoungsu: Boolean!
   admin: Boolean
-  exp: Int!
+  email: String
+  useBNPL: Boolean
+  exp: Int
 }
 
 type MessageResult {

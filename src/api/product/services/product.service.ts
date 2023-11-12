@@ -49,11 +49,15 @@ export class ProductService {
   }
 
   async delete(...ids: number[]): Promise<DeleteResult> {
-    const products = await this.productRepository.find({
-      where: { auto: In(ids) },
-    });
-    this.productLogService.saveAll(products, 'D');
-    return await this.productRepository.delete(ids);
+    try {
+      const products = await this.productRepository.find({
+        where: { auto: In(ids) },
+      });
+      this.productLogService.saveAll(products, 'D');
+      return await this.productRepository.delete(ids);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async update(args: UpdateProductArgs): Promise<Product> {

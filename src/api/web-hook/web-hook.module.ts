@@ -10,6 +10,7 @@ import { PaymentItemService } from '../payment-item/services/payment-item.servic
 import { CsService } from '../cs/services/cs.service';
 import { PaymentVirtualService } from '../payment-virtual/services/payment-virtual.service';
 import { PaymentRefundService } from '../payment-refund/services/payment-refund.service';
+import PaymentManager from '../payment/module/payment-manager';
 
 @Module({
   imports: [OrmModule],
@@ -24,6 +25,7 @@ import { PaymentRefundService } from '../payment-refund/services/payment-refund.
     PaymentRefundService,
     CsService,
     OrdersGateway,
+    PaymentManager,
   ],
 })
 export class WebHookModule {}

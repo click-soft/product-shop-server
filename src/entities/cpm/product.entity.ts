@@ -3,7 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
 import { Cs } from './cs.entity';
 
 @ObjectType()
-@Entity("product")
+@Entity('product')
 export default class Product extends BaseEntity {
   @Field(() => Int)
   @PrimaryGeneratedColumn({ type: 'int', name: 'pd_auto' })
@@ -104,4 +104,8 @@ export default class Product extends BaseEntity {
   @Field()
   @Column({ type: 'int', name: 'pd_web_payment_item_id' })
   webPaymentItemId: number;
+
+  @Field()
+  @Column({ type: 'boolean', name: 'pd_web_bnpl' })
+  webBNPL: boolean;
 }

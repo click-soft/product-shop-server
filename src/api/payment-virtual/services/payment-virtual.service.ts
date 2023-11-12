@@ -10,7 +10,10 @@ export class PaymentVirtualService {
     private paymentVirtualRepository: Repository<PaymentVirtual>,
   ) {}
 
-  async save(data: PaymentVirtual): Promise<PaymentVirtual> {
+  async save(paymentId: number, data: PaymentVirtual): Promise<PaymentVirtual> {
+    if (!data) return;
+
+    data.paymentId = paymentId;
     return await this.paymentVirtualRepository.save(data);
   }
 }

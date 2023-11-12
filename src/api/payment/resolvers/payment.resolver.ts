@@ -23,6 +23,7 @@ import { Cs } from 'src/entities/cpm/cs.entity';
 import { RefundOrderArgs } from '../dto/refund-order.args';
 import CancelOrderPipe from 'src/pipes/cancel-order.pipe';
 import { ProductService } from 'src/api/product/services/product.service';
+import PaymentManager from '../module/payment-manager';
 
 @Resolver(() => Payment)
 export class PaymentResolver {
