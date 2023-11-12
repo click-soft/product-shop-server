@@ -24,9 +24,6 @@ export class AuthService {
 
   async login(args: LoginArgs): Promise<TokenResult> {
     const account = await this.accountService.verifyAccount(args);
-    if (!account) {
-      throw new NotFoundException('아이디 혹은 비밀번호를 확인하세요.');
-    }
 
     return await this.createTokens(account);
   }
@@ -38,20 +35,15 @@ export class AuthService {
     });
     const payload = this.csService.convertCsToUser({ cs, account });
 
-    try {
-      const accessToken = await this.createAccessToken(payload);
-      const refreshToken = await this.createRefeshToken(payload);
+    const accessToken = await this.createAccessToken(payload);
+    const refreshToken = await this.createRefeshToken(payload);
+    await this.accountService.saveRefeshToken(account.userId, refreshToken);
 
-      this.accountService.saveRefeshToken(payload.ykiho, refreshToken);
-
-      return {
-        accessToken,
-        usr: payload.ykiho,
-        admin: payload.admin,
-      };
-    } catch (err) {
-      throw new UnauthorizedException();
-    }
+    return {
+      accessToken,
+      usr: payload.ykiho,
+      admin: payload.admin,
+    };
   }
 
   async logout(userId: string) {
@@ -59,17 +51,25 @@ export class AuthService {
   }
 
   async createAccessToken(payload: User) {
-    return await this.jwtService.sign(payload, {
-      secret: this.configService.get('JWT_SECRET'),
-      expiresIn: this.configService.get<string>('JWT_EXPIRES_IN'),
-    });
+    try {
+      return await this.jwtService.sign(payload, {
+        secret: this.configService.get('JWT_SECRET'),
+        expiresIn: this.configService.get<string>('JWT_EXPIRES_IN'),
+      });
+    } catch (err) {
+      throw new UnauthorizedException();
+    }
   }
 
   async createRefeshToken(payload: User) {
-    return await this.jwtService.sign(payload, {
-      secret: this.configService.get('JWT_RF_SECRET'),
-      expiresIn: this.configService.get<string>('JWT_RF_EXPIRES_IN'),
-    });
+    try {
+      return await this.jwtService.sign(payload, {
+        secret: this.configService.get('JWT_RF_SECRET'),
+        expiresIn: this.configService.get<string>('JWT_RF_EXPIRES_IN'),
+      });
+    } catch (err) {
+      throw new UnauthorizedException();
+    }
   }
 
   async refresh(key: string): Promise<TokenResult> {
