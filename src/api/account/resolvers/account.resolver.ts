@@ -42,7 +42,6 @@ export class AccountResolver {
     return await this.accountService.sendChangePasswordEmail(args);
   }
 
-  @UseGuards(GqlAuthGuard)
   @Mutation(() => UpdateResult)
   async changePassword(@Args() args: ChangePasswordArgs) {
     return await this.accountService.changePassword(args);
