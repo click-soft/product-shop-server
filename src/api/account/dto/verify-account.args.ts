@@ -1,10 +1,10 @@
-import { Field, ObjectType } from "@nestjs/graphql"
+import { ArgsType, Field } from '@nestjs/graphql';
 
-@ObjectType()
+@ArgsType()
 export default class VerifyAccountArgs {
   @Field()
-  userId: string
-  
+  userId: string;
+
   @Field()
-  password: string
+  password: string;
 }

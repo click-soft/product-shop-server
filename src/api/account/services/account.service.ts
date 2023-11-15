@@ -156,4 +156,15 @@ export class AccountService {
       .where('user_id = :userId ', { userId })
       .execute();
   }
+
+  async changeEmail(userId: string, newEmail: string) {
+    return await this.accountRepository
+      .createQueryBuilder()
+      .update(Account)
+      .set({
+        email: newEmail,
+      })
+      .where('user_id = :userId ', { userId })
+      .execute();
+  }
 }

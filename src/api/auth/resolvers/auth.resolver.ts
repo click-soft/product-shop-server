@@ -7,6 +7,7 @@ import LoginArgs from '../../_common/dto/login.args';
 import TokenResult from '../types/token-result';
 import { AuthService } from '../services/auth.service';
 import { GqlAuthGuard } from '../guards/gql.auth.guard';
+import { AccountService } from 'src/api/account/services/account.service';
 
 @Resolver()
 export default class AuthResolver {
@@ -15,7 +16,7 @@ export default class AuthResolver {
   @UseGuards(GqlAuthGuard)
   @Query(() => User)
   async getUser(@GetGqlUser() user: User) {
-    return user;
+    return await this.authService.getUser(user);
   }
 
   @Mutation(() => TokenResult)

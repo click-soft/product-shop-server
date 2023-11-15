@@ -87,6 +87,7 @@ export class CsService {
 
   convertCsToUser({ cs, account }: { cs: Cs; account: Account }): User {
     return {
+      userId: account.userId,
       jisa: cs.jisa,
       ykiho: cs.code,
       saupkiho: cs.saupnum,

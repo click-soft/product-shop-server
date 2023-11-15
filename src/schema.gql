@@ -304,6 +304,7 @@ type CsType {
 }
 
 type User {
+  userId: String!
   jisa: String!
   ykiho: String!
   saupkiho: String!
@@ -361,6 +362,7 @@ type Query {
   getAdminPayments(jisa: String!, startDate: DateTime!, endDate: DateTime!, emCode: String, customerName: String, orderId: String, page: Int!): PaymentsWithPage!
   getOrderCompleted(orderId: String!): Payment!
   getAccount(userId: String!): Account!
+  verifyAccount(userId: String!, password: String!): Account!
   validChangePassword(userId: String!, token: String!): Boolean!
   getAdminProducts(startYmd: String!, endYmd: String!, emCode: String, csMyung: String, page: Int!): ProductsWithPage!
   getProductsBunryuList(jisa: String!, bunryu: String): [ProductsByBunryu!]!
@@ -381,6 +383,7 @@ type Mutation {
   saveAccount(userId: String!, password: String!, email: String!): Account!
   sendChangePasswordEmail(userId: String!): String!
   changePassword(userId: String!, password: String!): UpdateResult!
+  changeEmail(newEmail: String!): UpdateResult!
   deleteProducts(ids: [Int!]!): DeleteResult!
   updateProduct(auto: Int!, orderCheck: String, seller: String): Product!
   getPaymentItemIdsByPaymentId(paymentId: Int!): [Int!]

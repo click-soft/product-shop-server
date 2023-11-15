@@ -34,9 +34,9 @@ export class AuthService {
       saupkiho: account.saupkiho,
     });
     const payload = this.csService.convertCsToUser({ cs, account });
-
     const accessToken = await this.createAccessToken(payload);
     const refreshToken = await this.createRefeshToken(payload);
+
     await this.accountService.saveRefeshToken(account.userId, refreshToken);
 
     return {
@@ -91,5 +91,14 @@ export class AuthService {
     } catch (err) {
       return undefined;
     }
+  }
+
+  async getUser(user: User) {
+    const account = await this.accountService.findOne(user.userId);
+
+    return {
+      ...user,
+      ...account,
+    };
   }
 }
