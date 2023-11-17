@@ -328,12 +328,6 @@ type TokenResult {
   admin: Boolean
 }
 
-type UpdateResult {
-  raw: Any
-  affected: Int!
-  generatedMaps: Any!
-}
-
 type CheckoutResult {
   success: Boolean!
   errorCode: String
@@ -347,6 +341,12 @@ type PaymentsWithPage {
   page: Int!
   isLast: Boolean!
   payments: [Payment!]!
+}
+
+type UpdateResult {
+  raw: Any
+  affected: Int!
+  generatedMaps: Any!
 }
 
 """Any scalar type"""
@@ -375,8 +375,6 @@ type Mutation {
   logout: MessageResult!
   refresh(key: String!): TokenResult!
   addToCart(id: Int, cartId: Int, code: String!, quantity: Int!, fit: Boolean!, createdDate: DateTime, updatedDate: DateTime): MessageResult!
-  updateCartItemQuantity(id: Int!, quantity: Int!): UpdateResult!
-  deleteCartItems(ids: [Int!]!): DeleteResult!
   checkout(dto: CheckoutInput!): CheckoutResult!
   cancelOrder(paymentId: Int!, paymentKey: String!, cancelReason: String!): CheckoutResult!
   refundOrder(paymentId: Int!, cancelReason: String!, bank: String!, accountNumber: String!, holderName: String!): CheckoutResult!
@@ -387,6 +385,8 @@ type Mutation {
   deleteProducts(ids: [Int!]!): DeleteResult!
   updateProduct(auto: Int!, orderCheck: String, seller: String): Product!
   getPaymentItemIdsByPaymentId(paymentId: Int!): [Int!]
+  updateCartItemQuantity(id: Int!, quantity: Int!): UpdateResult!
+  deleteCartItems(ids: [Int!]!): DeleteResult!
 }
 
 input CheckoutInput {

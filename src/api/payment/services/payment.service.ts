@@ -4,16 +4,12 @@ import PaymentItem from 'src/entities/cpm/payment-item.entity';
 import Payment from 'src/entities/cpm/payment.entity';
 import WebHookArgs from 'src/api/web-hook/dto/web-hook.args';
 import { In, Repository } from 'typeorm';
-import {
-  getTestCode,
-  getTossPaymentsSecretKey,
-} from 'src/config/is-test.config';
+import { getTestCode } from 'src/config/is-test.config';
 import { format } from 'date-fns';
 import { OrdersGateway } from 'src/socket.io/orders.gateway';
 import { PaymentItemService } from 'src/api/payment-item/services/payment-item.service';
 import { ProductService } from 'src/api/product/services/product.service';
 import { CsService } from 'src/api/cs/services/cs.service';
-import { CheckoutCartItemInput } from '../dto/checkout-cart-item.input';
 import { CheckoutResult } from '../types/checkout-result';
 import { CheckoutInput } from '../dto/checkout.input';
 import GetPaymentWithItemsArgs from '../dto/get-payment-with-items.args';
@@ -34,8 +30,6 @@ export class PaymentService {
   constructor(
     @InjectRepository(Payment)
     private paymentRepository: Repository<Payment>,
-    @InjectRepository(PaymentItem)
-    private paymentItemRepository: Repository<PaymentItem>,
     private paymentItemService: PaymentItemService,
     private paymentVirtualService: PaymentVirtualService,
     private productService: ProductService,
@@ -85,20 +79,6 @@ export class PaymentService {
     }
   }
 
-  private async savePaymentItems(
-    paymentId: number,
-    items: CheckoutCartItemInput[],
-  ): Promise<PaymentItem[]> {
-    const paymentItems = items.map((item) => {
-      return PaymentItem.create({
-        paymentId,
-        ...item,
-      });
-    });
-
-    return await this.paymentItemRepository.save(paymentItems);
-  }
-
   async checkout(
     dto: CheckoutInput,
     ykiho: string,
@@ -124,7 +104,7 @@ export class PaymentService {
       });
 
       if (savedPayment) {
-        const paymentItems = await this.savePaymentItems(
+        const paymentItems = await this.paymentItemService.savePaymentItems(
           savedPayment.id,
           dto.items,
         );

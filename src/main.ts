@@ -19,6 +19,7 @@ async function bootstrap() {
     }),
   );
   app.enableCors({
+    // origin: true,
     origin: [
       'http://localhost:3001',
       'https://localhost:3001',
@@ -26,6 +27,8 @@ async function bootstrap() {
       'https://test.localhost:3001',
       'https://www.click-soft.shop',
       'https://www.test.click-soft.shop',
+      'http://192.168.45.138:3001',
+      'http://www.192.168.45.138:3001',
     ], // 허용할 출처
     credentials: true,
     exposedHeaders: ['X-Is-Test'],

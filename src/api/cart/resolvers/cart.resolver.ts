@@ -40,18 +40,4 @@ export default class CartResolver {
   async addToCart(@GetGqlUser() user: User, @Args() args: CartItemArgs) {
     return await this.cartService.saveCart(user.ykiho, args);
   }
-
-  @UseGuards(GqlAuthGuard)
-  @Mutation(() => UpdateResult)
-  async updateCartItemQuantity(@Args() args: UpdateCartItemQuantityArgs) {
-    return await this.cartService.updateCartItem(args.id, {
-      quantity: args.quantity,
-    });
-  }
-
-  @UseGuards(GqlAuthGuard)
-  @Mutation(() => DeleteResult)
-  async deleteCartItems(@Args('ids', { type: () => [Int] }) ids: number[]) {
-    return await this.cartService.deleteCartItems(...ids);
-  }
 }

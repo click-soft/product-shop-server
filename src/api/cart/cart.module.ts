@@ -9,6 +9,7 @@ import { ProductListService } from '../product-list/services/product-list.servic
 import { ProductListSubService } from '../product-list-sub/services/product-list-sub.service';
 import { CsService } from '../cs/services/cs.service';
 import { PaymentItemService } from '../payment-item/services/payment-item.service';
+import { CartItemService } from '../cart-item/services/cart-item.service';
 
 @Module({
   imports: [OrmModule, JwtConfigModule],
@@ -21,6 +22,7 @@ import { PaymentItemService } from '../payment-item/services/payment-item.servic
     ProductlogService,
     PaymentItemService,
     CsService,
+    CartItemService,
   ],
 })
 export class CartModule {}

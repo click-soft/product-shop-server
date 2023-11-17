@@ -6,14 +6,14 @@ import { ProductListSubService } from 'src/api/product-list-sub/services/product
 import CartItemArgs from '../dto/cart-item.args';
 import { ProductListSub } from 'src/entities/cpm/productlistsub.entity';
 import { Cart } from 'src/entities/cpm/cart.entity';
+import { CartItemService } from 'src/api/cart-item/services/cart-item.service';
 
 @Injectable()
 export class CartService {
   constructor(
     @InjectRepository(Cart)
     private cartRepository: Repository<Cart>,
-    @InjectRepository(CartItem)
-    private cartItemRepository: Repository<CartItem>,
+    private cartItemService: CartItemService,
     private productListSubService: ProductListSubService,
   ) {}
 
@@ -82,20 +82,7 @@ export class CartService {
       cart.cartItems = [newCartItem];
     }
 
-    return await this.saveCartItems(cart.id, cart.cartItems);
-  }
-
-  async saveCartItems(
-    cartId: number,
-    cartItems: CartItem[],
-  ): Promise<{ message: string }> {
-    cartItems.forEach((cartItem) => (cartItem.cartId = cartId));
-    const result = await this.cartItemRepository.save(cartItems);
-
-    if (result) {
-      return { message: 'success' };
-    }
-    throw new HttpException('Add to cart failed', HttpStatus.BAD_REQUEST);
+    return await this.cartItemService.saveCartItems(cart.id, cart.cartItems);
   }
 
   async getItemsCount(ykiho: string): Promise<number> {
@@ -108,21 +95,5 @@ export class CartService {
     );
 
     return itemsCount;
-  }
-
-  async getCartItems(): Promise<CartItem[]> {
-    return await this.cartItemRepository.find();
-  }
-
-  async updateCartItem(
-    id: number,
-    updatedData: Partial<CartItem>,
-  ): Promise<UpdateResult> {
-    const result = await this.cartItemRepository.update(id, updatedData);
-    return result;
-  }
-
-  async deleteCartItems(...ids: number[]): Promise<DeleteResult> {
-    return this.cartItemRepository.delete(ids);
   }
 }
