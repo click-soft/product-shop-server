@@ -24,6 +24,8 @@ import { PaymentRefundModule } from './api/payment-refund/payment-refund.module'
 import { AccountTempModule } from './api/account-temp/account-temp.module';
 import { TestModule } from './api/test/test.module';
 import { CartItemModule } from './api/cart-item/cart-item.module';
+import { ProductListImageModule } from './api/product-list-image/product-list-image.module';
+import { ImagesModule } from './images/images.module';
 
 @Module({
   imports: [
@@ -56,6 +58,8 @@ import { CartItemModule } from './api/cart-item/cart-item.module';
     AccountTempModule,
     TestModule,
     CartItemModule,
+    ProductListImageModule,
+    ImagesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -14,6 +14,7 @@ import { Cart } from './entities/cpm/cart.entity';
 import PaymentVirtual from './entities/cpm/payment-virtual.entity';
 import PaymentRefund from './entities/cpm/payment-refund.entity';
 import { AccountTemp } from './entities/cpm/account-temp.entity';
+import ProductListImage from './entities/cpm/product-list-image.entity';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { AccountTemp } from './entities/cpm/account-temp.entity';
       ProductLog,
       ProductList,
       ProductListSub,
+      ProductListImage,
       Payment,
       PaymentItem,
       PaymentVirtual,
