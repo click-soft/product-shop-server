@@ -1,11 +1,9 @@
-import { Injectable, StreamableFile } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { log } from 'console';
-import { createReadStream } from 'fs';
 import ProductListImage from 'src/entities/cpm/product-list-image.entity';
 import GetProductListImageDto from 'src/images/dto/get-product-list-image.dto';
+import ZipUtil from 'src/util/zip.util';
 import { Repository } from 'typeorm';
-
 @Injectable()
 export class ProductListImageService {
   constructor(
@@ -14,15 +12,18 @@ export class ProductListImageService {
   ) {}
 
   async getImageBuffer({ jisa, smCode }: GetProductListImageDto) {
+    let result: ProductListImage;
     try {
-      const result = await this.pliRepository.findOne({
-        select: { image: true },
+      result = await this.pliRepository.findOne({
+        select: { smCode: true, image: true },
         where: { jisa, smCode },
       });
 
-      return result?.image;
+      if (!result) return;
+
+      return await ZipUtil.compress(result.image);
     } catch (error) {
-      log(error);
+      return result?.image;
     }
   }
 }

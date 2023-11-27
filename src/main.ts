@@ -11,7 +11,7 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       exceptionFactory: (errors) => {
-        let messages = errors
+        const messages = errors
           .map((error) => Object.values(error.constraints))
           .join('\n');
         return new BadRequestException(messages);

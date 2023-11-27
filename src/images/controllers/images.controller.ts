@@ -14,7 +14,7 @@ export class ImagesController {
     @Res() res: Response,
   ) {
     const buffer = await this.imagesService.getProductListImage(dto);
-    
+
     if (buffer) {
       res.setHeader('Content-Type', 'image/png');
       res.send(buffer);
