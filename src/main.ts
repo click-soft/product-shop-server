@@ -26,6 +26,8 @@ async function bootstrap() {
       'http://test.localhost:3001',
       'https://test.localhost:3001',
       'https://www.click-soft.shop',
+      'https://a.click-soft.shop',
+      'https://t.click-soft.shop',
       'https://www.test.click-soft.shop',
       'http://192.168.45.138:3001',
       'http://www.192.168.45.138:3001',

@@ -1,5 +1,10 @@
-import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
-import { Server , Socket} from 'socket.io';
+import {
+  MessageBody,
+  SubscribeMessage,
+  WebSocketGateway,
+  WebSocketServer,
+} from '@nestjs/websockets';
+import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway()
 export class SocketIoGateway {
@@ -19,8 +24,8 @@ export class SocketIoGateway {
     // return 'Hello world!';
 
     this.server.emit('onMessage', {
-      msg: "test123132",
+      msg: 'test123132',
       body: body,
-    })
+    });
   }
 }
