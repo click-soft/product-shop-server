@@ -54,7 +54,8 @@ ENV SMTP_AUTH_PASS=${SMTP_AUTH_PASS}
 
 RUN pnpm install 
 
-COPY . .
+# COPY . .
+COPY --chown=node:node . .
 
 RUN pnpm build
 
