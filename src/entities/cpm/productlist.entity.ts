@@ -1,17 +1,16 @@
-import { BaseEntity, Column, Entity, JoinColumn, OneToMany, PrimaryColumn } from "typeorm";
-import { ProductListSub } from "./productlistsub.entity";
-import { Field, ObjectType } from "@nestjs/graphql";
+import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
+import { ProductListSub } from './productlistsub.entity';
+import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-@Entity({ name: "productlist" })
+@Entity({ name: 'productlist' })
 export class ProductList extends BaseEntity {
-
   @Field()
-  @PrimaryColumn({ name: "pl_jisa" })
+  @PrimaryColumn({ name: 'pl_jisa' })
   jisa: string;
 
   @Field()
-  @PrimaryColumn({ name: "pl_smcode" })
+  @PrimaryColumn({ name: 'pl_smcode' })
   smCode: string;
 
   @Field()
@@ -37,6 +36,10 @@ export class ProductList extends BaseEntity {
   @Field()
   @Column({ name: 'pl_bunryu' })
   bunryu: string;
+
+  @Field()
+  @Column({ name: 'pl_step' })
+  step: number;
 
   @Field(() => ProductListSub)
   productListSub: ProductListSub;

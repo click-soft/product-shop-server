@@ -186,6 +186,7 @@ type ProductList {
   bigo: String!
   web: Boolean!
   bunryu: String!
+  step: Float!
   productListSub: ProductListSub!
 }
 
@@ -202,7 +203,7 @@ type ProductListSub {
   etc3: String
   etc4: String
   etc5: String
-  productList: [ProductList!]
+  productList: ProductList
 }
 
 type ProductsWithPage {
