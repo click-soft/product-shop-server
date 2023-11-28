@@ -4,7 +4,7 @@ import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 
 @Injectable()
 export class MySqlCpmConfigService implements TypeOrmOptionsFactory {
-  constructor(private configService: ConfigService) {}
+  constructor(private configService: ConfigService) { }
 
   createTypeOrmOptions(): TypeOrmModuleOptions {
     return {
@@ -17,7 +17,7 @@ export class MySqlCpmConfigService implements TypeOrmOptionsFactory {
       entities: ['dist/src/entities/cpm/**/*.entity.{js,ts}'],
       synchronize: false,
       charset: 'utf8mb4',
-      timezone: 'z',
+      timezone: 'Asia/Seoul',
       // logging: true,
     };
   }

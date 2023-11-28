@@ -6,7 +6,7 @@ import { MySqlCpmConfigService } from './config/typeorm.config';
 import { ProductModule } from './api/product/product.module';
 import { CsModule } from './api/cs/cs.module';
 import { AuthModule } from './api/auth/auth.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { CartModule } from './api/cart/cart.module';
 import { JwtConfigModule } from './api/jwt/jwt-config.module';
 import { PaymentModule } from './api/payment/payment.module';
@@ -64,4 +64,4 @@ import { ImagesModule } from './images/images.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

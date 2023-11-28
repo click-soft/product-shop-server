@@ -1,6 +1,3 @@
-# 임시
-Dockerfile
-
 # compiled output
 /dist
 /node_modules
