@@ -1,7 +1,12 @@
-import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
+import {
+  MessageBody,
+  SubscribeMessage,
+  WebSocketGateway,
+  WebSocketServer,
+} from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import Payment from "src/entities/cpm/payment.entity";
-import OrdersArgs from "./dto/orders.args";
+import Payment from 'src/entities/cpm/payment.entity';
+import OrdersArgs from './dto/orders.args';
 
 @WebSocketGateway()
 export class OrdersGateway {

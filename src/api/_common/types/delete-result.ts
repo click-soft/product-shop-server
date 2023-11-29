@@ -1,5 +1,5 @@
-import { Field, Int, ObjectType, Scalar } from "@nestjs/graphql";
-import { AnyScalar } from "../custom-scalar/any.scalar";
+import { Field, Int, ObjectType, Scalar } from '@nestjs/graphql';
+import { AnyScalar } from '../custom-scalar/any.scalar';
 
 @ObjectType()
 export class DeleteResult {

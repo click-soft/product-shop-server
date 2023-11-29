@@ -1,5 +1,5 @@
-import { Field, Int, ObjectType } from "@nestjs/graphql";
-import Product from "src/entities/cpm/product.entity";
+import { Field, Int, ObjectType } from '@nestjs/graphql';
+import Product from 'src/entities/cpm/product.entity';
 
 @ObjectType()
 export default class ProductsWithPage {

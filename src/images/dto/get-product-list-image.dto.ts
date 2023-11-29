@@ -1,4 +1,4 @@
-export default class GetProductListImageDto{
+export default class GetProductListImageDto {
   jisa: string;
   smCode: string;
 }

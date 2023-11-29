@@ -1,5 +1,5 @@
 export default interface WebHookArgs {
-  createdAt: Date
+  createdAt: Date;
   secret: string;
   orderId: string;
   status: string;

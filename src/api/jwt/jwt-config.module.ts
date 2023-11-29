@@ -8,11 +8,11 @@ import { JwtModule } from '@nestjs/jwt';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get("JWT_SECRET"),
+        secret: configService.get('JWT_SECRET'),
         // signOptions: { expiresIn: configService.get<string>("JWT_EXPIRES_IN") },
       }),
     }),
   ],
-  exports: [JwtModule]
+  exports: [JwtModule],
 })
-export class JwtConfigModule { }
+export class JwtConfigModule {}

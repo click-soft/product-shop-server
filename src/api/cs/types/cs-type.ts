@@ -1,19 +1,19 @@
-import { Field, ObjectType } from "@nestjs/graphql";
+import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class CsType {
-  @Field(()=> String)
+  @Field(() => String)
   jisa?: string;
-  @Field(()=> String)
+  @Field(() => String)
   code?: string;
-  @Field(()=> String)
+  @Field(() => String)
   myung?: string;
-  @Field(()=> String)
+  @Field(() => String)
   daepyo?: string;
-  @Field(()=> String)
+  @Field(() => String)
   saupnum?: string;
-  @Field(()=> String)
+  @Field(() => String)
   youngsu?: string;
-  @Field(()=> String)
+  @Field(() => String)
   cherbang?: string;
 }

@@ -4,6 +4,6 @@ import { OrdersGateway } from './orders.gateway';
 
 @Module({
   providers: [SocketIoGateway, OrdersGateway],
-  exports: [OrdersGateway]
+  exports: [OrdersGateway],
 })
-export class SocketIoModule { }
+export class SocketIoModule {}

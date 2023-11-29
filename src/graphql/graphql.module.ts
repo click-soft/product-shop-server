@@ -12,6 +12,6 @@ import { AnyScalar } from 'src/api/_common/custom-scalar/any.scalar';
       context: ({ req, res }) => ({ req, res }),
     }),
   ],
-  providers: [AnyScalar]
+  providers: [AnyScalar],
 })
-export class GraphqlModule { }
+export class GraphqlModule {}

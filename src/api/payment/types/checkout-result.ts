@@ -21,5 +21,5 @@ export class CheckoutResult {
   totalAmount?: number;
   status?: string;
 
-  paymentVirtual?: PaymentVirtual
+  paymentVirtual?: PaymentVirtual;
 }

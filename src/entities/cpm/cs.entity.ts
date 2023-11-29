@@ -1,5 +1,5 @@
-import { Field, ObjectType } from "@nestjs/graphql";
-import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
+import { Field, ObjectType } from '@nestjs/graphql';
+import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
 
 @ObjectType()
 @Entity({ name: 'cs' })
@@ -394,4 +394,4 @@ export class Cs extends BaseEntity {
   @Field({ nullable: true })
   @Column({ name: 'cs_medi_grname' })
   medi_grname: string;
-};
+}

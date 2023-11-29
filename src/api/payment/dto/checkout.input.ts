@@ -1,5 +1,5 @@
-import { Field, InputType, Int } from "@nestjs/graphql";
-import { CheckoutCartItemInput } from "./checkout-cart-item.input";
+import { Field, InputType, Int } from '@nestjs/graphql';
+import { CheckoutCartItemInput } from './checkout-cart-item.input';
 
 @InputType()
 export class CheckoutInput {

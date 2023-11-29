@@ -8,7 +8,13 @@ import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [OrmModule],
-  providers: [AccountResolver, AccountService, CsService, NodeMailerService, JwtService],
+  providers: [
+    AccountResolver,
+    AccountService,
+    CsService,
+    NodeMailerService,
+    JwtService,
+  ],
   exports: [AccountService],
 })
 export class AccountModule {}

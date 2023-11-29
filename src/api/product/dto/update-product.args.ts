@@ -1,4 +1,4 @@
-import { ArgsType, Field, Int } from "@nestjs/graphql";
+import { ArgsType, Field, Int } from '@nestjs/graphql';
 
 @ArgsType()
 export class UpdateProductArgs {
@@ -8,4 +8,4 @@ export class UpdateProductArgs {
   orderCheck: string;
   @Field({ nullable: true })
   seller: string;
-} 
+}

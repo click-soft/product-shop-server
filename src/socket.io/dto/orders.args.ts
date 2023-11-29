@@ -1,4 +1,4 @@
 export default class OrdersArgs {
-  state: 'checkout' | 'update'
+  state: 'checkout' | 'update';
   data?: any;
 }

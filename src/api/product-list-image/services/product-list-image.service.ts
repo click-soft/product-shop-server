@@ -9,7 +9,7 @@ export class ProductListImageService {
   constructor(
     @InjectRepository(ProductListImage)
     private pliRepository: Repository<ProductListImage>,
-  ) { }
+  ) {}
 
   async getImageBuffer({ jisa, smCode }: GetProductListImageDto) {
     let result: ProductListImage;

@@ -1,5 +1,5 @@
-import { Field, Int, ObjectType } from "@nestjs/graphql";
-import Payment from "src/entities/cpm/payment.entity";
+import { Field, Int, ObjectType } from '@nestjs/graphql';
+import Payment from 'src/entities/cpm/payment.entity';
 
 @ObjectType()
 export default class PaymentsWithPage {

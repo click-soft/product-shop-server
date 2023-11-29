@@ -1,10 +1,10 @@
-import { ArgsType, Field, Int, ObjectType } from "@nestjs/graphql";
+import { ArgsType, Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ArgsType()
 export class UpdateCartItemQuantityArgs {
-  @Field(()=> Int)
+  @Field(() => Int)
   id: number;
 
-  @Field(()=> Int)
+  @Field(() => Int)
   quantity: number;
 }

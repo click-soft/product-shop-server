@@ -1,7 +1,17 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Cart } from "./cart.entity";
-import { ProductListSub } from "./productlistsub.entity";
-import { Field, Int, ObjectType } from "@nestjs/graphql";
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { Cart } from './cart.entity';
+import { ProductListSub } from './productlistsub.entity';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 @Entity({ name: 'cart_item' })

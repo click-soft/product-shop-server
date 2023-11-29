@@ -1,6 +1,12 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import Payment from "./payment.entity";
-import { Field, ObjectType } from "@nestjs/graphql";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import Payment from './payment.entity';
+import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 @Entity('payment_item')
