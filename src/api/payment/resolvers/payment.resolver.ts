@@ -7,7 +7,7 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { GetGqlUser } from 'src/decorators/get-user';
-import { Body, UseGuards, UsePipes } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import Payment from 'src/entities/cpm/payment.entity';
 import { PaymentService } from '../services/payment.service';
 import { CsService } from 'src/api/cs/services/cs.service';
@@ -23,7 +23,6 @@ import { Cs } from 'src/entities/cpm/cs.entity';
 import { RefundOrderArgs } from '../dto/refund-order.args';
 import CancelOrderPipe from 'src/pipes/cancel-order.pipe';
 import { ProductService } from 'src/api/product/services/product.service';
-import PaymentManager from '../module/payment-manager';
 
 @Resolver(() => Payment)
 export class PaymentResolver {
