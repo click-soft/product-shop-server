@@ -41,7 +41,7 @@ export class KorDateTimeMiddleware implements NestMiddleware {
         if (this.isISO8601DateTime(obj[key])) {
           console.log('first', obj[key]);
 
-          obj[key] = dayjs(obj[key]).tz('Asia/Seoul').toISOString();
+          obj[key] = dayjs(obj[key]).tz('Asia/Seoul').format();
 
           console.log('last', obj[key]);
         } else if (typeof obj[key] === 'object') {
