@@ -96,7 +96,7 @@ export class PaymentService {
     }
 
     if (result.success) {
-      let savedPayment: Payment = await this.savePayment({
+      const savedPayment: Payment = await this.savePayment({
         ykiho,
         result,
         quantity: dto.quantity,
@@ -247,6 +247,8 @@ export class PaymentService {
     }
     const startDateString = format(args.startDate, 'yyyy-MM-dd HH:mm:ss');
     const endDateString = format(args.endDate, 'yyyy-MM-dd HH:mm:ss');
+
+    console.log(`start: ${startDateString}, end: ${endDateString}`);
 
     const query = this.paymentRepository
       .createQueryBuilder()

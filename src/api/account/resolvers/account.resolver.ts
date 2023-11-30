@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { AccountService } from '../services/account.service';
 import SaveAccountArgs from '../dto/save-account.args';
 import { Account } from 'src/entities/cpm/account.entity';
@@ -27,6 +27,7 @@ export class AccountResolver {
     return await this.accountService.verifyAccount(args);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   @Query(() => Boolean!)
   async validChangePassword(@Args() args: ValidChangePasswordArgs) {
     return await this.accountService.validChangePassword(args);
@@ -37,6 +38,7 @@ export class AccountResolver {
     return await this.accountService.saveAccount(args);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   @Mutation(() => String!)
   async sendChangePasswordEmail(@Args() args: SendChangePasswordEmailArgs) {
     return await this.accountService.sendChangePasswordEmail(args);

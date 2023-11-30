@@ -22,10 +22,11 @@ import { SocketIoModule } from './socket.io/socket.io.module';
 import { PaymentVirtualModule } from './api/payment-virtual/payment-virtual.module';
 import { PaymentRefundModule } from './api/payment-refund/payment-refund.module';
 import { AccountTempModule } from './api/account-temp/account-temp.module';
-import { TestModule } from './api/test/test.module';
 import { CartItemModule } from './api/cart-item/cart-item.module';
 import { ProductListImageModule } from './api/product-list-image/product-list-image.module';
 import { ImagesModule } from './images/images.module';
+import { TestModule } from './api/test/test.module';
+import { Test2Module } from './api/test2/test2.module';
 
 @Module({
   imports: [
@@ -56,10 +57,11 @@ import { ImagesModule } from './images/images.module';
     PaymentVirtualModule,
     PaymentRefundModule,
     AccountTempModule,
-    TestModule,
     CartItemModule,
     ProductListImageModule,
     ImagesModule,
+    TestModule,
+    Test2Module,
   ],
   controllers: [AppController],
   providers: [AppService],

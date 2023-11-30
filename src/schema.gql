@@ -350,6 +350,11 @@ type UpdateResult {
   generatedMaps: Any!
 }
 
+type Test {
+  """Example field (placeholder)"""
+  exampleField: String!
+}
+
 """Any scalar type"""
 scalar Any
 
@@ -369,6 +374,7 @@ type Query {
   getProductsBunryuList(jisa: String!, bunryu: String): [ProductsByBunryu!]!
   getPaymentItemById(id: Int!): PaymentItem!
   getManagers: [Em!]!
+  test(id: Int!): Test!
 }
 
 type Mutation {
@@ -388,6 +394,9 @@ type Mutation {
   getPaymentItemIdsByPaymentId(paymentId: Int!): [Int!]
   updateCartItemQuantity(id: Int!, quantity: Int!): UpdateResult!
   deleteCartItems(ids: [Int!]!): DeleteResult!
+  createTest(createTestInput: CreateTestInput!): Test!
+  updateTest(updateTestInput: UpdateTestInput!): Test!
+  removeTest(id: Int!): Test!
 }
 
 input CheckoutInput {
@@ -406,4 +415,15 @@ input CheckoutCartItemInput {
   fit: Boolean!
   quantity: Int!
   amount: Int!
+}
+
+input CreateTestInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateTestInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }
