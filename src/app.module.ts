@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -27,6 +27,7 @@ import { ProductListImageModule } from './api/product-list-image/product-list-im
 import { ImagesModule } from './images/images.module';
 import { TestModule } from './api/test/test.module';
 import { Test2Module } from './api/test2/test2.module';
+import { KorDateTimeMiddleware } from './middleware/kor-date-time.middleware';
 
 @Module({
   imports: [
@@ -66,4 +67,8 @@ import { Test2Module } from './api/test2/test2.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(KorDateTimeMiddleware).forRoutes('*');
+  }
+}
