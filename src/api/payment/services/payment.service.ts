@@ -248,7 +248,7 @@ export class PaymentService {
     const startDateString = format(args.startDate, 'yyyy-MM-dd HH:mm:ss');
     const endDateString = format(args.endDate, 'yyyy-MM-dd HH:mm:ss');
 
-    console.log(`start: ${startDateString}, end: ${endDateString}`);
+    console.log(`start: ${args.startDate}, end: ${args.endDate}`);
 
     const query = this.paymentRepository
       .createQueryBuilder()
