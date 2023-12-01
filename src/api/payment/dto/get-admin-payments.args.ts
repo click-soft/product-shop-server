@@ -1,34 +1,42 @@
-import { ArgsType, Field, Int, ObjectType } from '@nestjs/graphql';
+import { ArgsType, Field, Int } from '@nestjs/graphql';
+import { Transform } from 'class-transformer';
 import * as dayjs from 'dayjs';
+import * as utc from 'dayjs/plugin/utc';
+import * as timezone from 'dayjs/plugin/timezone';
 
-// function ToKorDate(target: any, propertyName: string) {
-//   Object.defineProperty<PropertyDescriptor>(target, propertyName, {
-//     get: function () {
-//       // console.log('get', this[propertyName]);
-//       return new Date();
-//       return (
-//         !this[propertyName] && dayjs(this[propertyName]).locale('ko').format()
-//       );
-//     },
-//     set: function (value: any) {
-//       console.log(propertyName);
-//       this[propertyName] = new Date();
-//       // this[propertyName] = dayjs(value).locale('ko').format();
-//     },
-//     enumerable: true,
-//     configurable: true,
-//   });
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+// function ToKorDate() {
+//   return function (target: any, propertyKey: string): any {
+//     let value = target[propertyKey];
+
+//     function getter() {
+//       return dayjs().format();
+//     }
+
+//     function setter(newVal: any) {
+//       value = newVal;
+//     }
+
+//     return {
+//       get: getter,
+//       set: setter,
+//       enumerable: true,
+//       configurable: true,
+//     };
+//   };
 // }
 
 @ArgsType()
 export default class GetAdminPaymentsArgs {
   @Field()
   jisa: string;
-
   @Field(() => Date)
-  // @ToKorDate
+  @Transform(({ value }) => dayjs(value).tz('Asia/Seoul').toDate())
   startDate: Date;
   @Field(() => Date)
+  @Transform(({ value }) => dayjs(value).tz('Asia/Seoul').toDate())
   endDate: Date;
   @Field({ nullable: true })
   emCode?: string;

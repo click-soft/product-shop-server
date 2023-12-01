@@ -10,7 +10,7 @@ import { ProductService } from 'src/api/product/services/product.service';
 export default class CancelOrderPipe implements PipeTransform {
   constructor(private productService: ProductService) {}
 
-  async transform(value: any, metadata: ArgumentMetadata) {
+  async transform(value: any, _: ArgumentMetadata) {
     const paymentId = parseInt(value.paymentId);
     const isValid = await this.productService.validCancelByPaymentId(paymentId);
 
