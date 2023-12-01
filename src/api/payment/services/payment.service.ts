@@ -246,13 +246,6 @@ export class PaymentService {
     if (args.emCode) {
       ykihos = await this.csService.getYkihosByEmCode(args.emCode);
     }
-    const koFullDateFormat = (date: Date) =>
-      koDateFormat(date, 'YYYY-MM-dd HH:mm:ss');
-
-    const startDateString = koFullDateFormat(args.startDate);
-    const endDateString = koFullDateFormat(args.endDate);
-
-    console.log(`s : ${startDateString}, e : ${endDateString}`);
 
     const query = this.paymentRepository
       .createQueryBuilder()
@@ -261,6 +254,12 @@ export class PaymentService {
     if (args.orderId) {
       query.where('order_id = :orderId', { orderId: args.orderId });
     } else {
+      const koFullDateFormat = (date: Date) =>
+        koDateFormat(date, 'YYYY-MM-DD HH:mm:ss');
+
+      const startDateString = koFullDateFormat(args.startDate);
+      const endDateString = koFullDateFormat(args.endDate);
+
       query
         .where('ykiho IN (:...ykihos)', { ykihos })
         .andWhere('requested_at >= :startDateString', { startDateString })
