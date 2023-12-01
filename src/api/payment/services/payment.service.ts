@@ -246,10 +246,13 @@ export class PaymentService {
     if (args.emCode) {
       ykihos = await this.csService.getYkihosByEmCode(args.emCode);
     }
-    const startDateString = koDateFormat(args.startDate, 'yyyy-MM-dd HH:mm:ss');
-    const endDateString = koDateFormat(args.endDate, 'yyyy-MM-dd HH:mm:ss');
+    const koFullDateFormat = (date: Date) =>
+      koDateFormat(date, 'yyyy-MM-dd HH:mm:ss');
 
-    console.log(`start: ${startDateString}, end: ${endDateString}`);
+    const startDateString = koFullDateFormat(args.startDate);
+    const endDateString = koFullDateFormat(args.endDate);
+
+    console.log(`s : ${startDateString}, e : ${endDateString}`);
 
     const query = this.paymentRepository
       .createQueryBuilder()
