@@ -1,9 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import PaymentItem from 'src/entities/cpm/payment-item.entity';
 import Payment from 'src/entities/cpm/payment.entity';
 import WebHookArgs from 'src/api/web-hook/dto/web-hook.args';
 import { In, Repository } from 'typeorm';
 import { getTestCode } from 'src/config/is-test.config';
+import { format } from 'date-fns';
 import { OrdersGateway } from 'src/socket.io/orders.gateway';
 import { PaymentItemService } from 'src/api/payment-item/services/payment-item.service';
 import { ProductService } from 'src/api/product/services/product.service';
@@ -17,13 +19,9 @@ import GetAdminPaymentsArgs from '../dto/get-admin-payments.args';
 import { PaymentVirtualService } from 'src/api/payment-virtual/services/payment-virtual.service';
 import { User } from 'src/api/auth/types/user';
 import { PaymentRefundService } from 'src/api/payment-refund/services/payment-refund.service';
+import TossRefundBody from 'src/api/_common/toss-payments/toss-refund-body';
 import PaymentManager from '../module/payment-manager';
-// import * as dayjs from 'dayjs';
-// import * as utc from 'dayjs/plugin/utc';
-// import * as timezone from 'dayjs/plugin/timezone';
-
-// dayjs.extend(utc);
-// dayjs.extend(timezone);
+import { koDateFormat } from 'src/util/ko-date.util';
 
 @Injectable()
 export class PaymentService {
@@ -248,6 +246,10 @@ export class PaymentService {
     if (args.emCode) {
       ykihos = await this.csService.getYkihosByEmCode(args.emCode);
     }
+    const startDateString = koDateFormat(args.startDate, 'yyyy-MM-dd HH:mm:ss');
+    const endDateString = koDateFormat(args.endDate, 'yyyy-MM-dd HH:mm:ss');
+
+    console.log(`start: ${startDateString}, end: ${endDateString}`);
 
     const query = this.paymentRepository
       .createQueryBuilder()
@@ -258,12 +260,8 @@ export class PaymentService {
     } else {
       query
         .where('ykiho IN (:...ykihos)', { ykihos })
-        .andWhere('requested_at >= :startDateString', {
-          startDateString: args.startDate,
-        })
-        .andWhere('requested_at <= :endDateString', {
-          endDateString: args.endDate,
-        })
+        .andWhere('requested_at >= :startDateString', { startDateString })
+        .andWhere('requested_at <= :endDateString', { endDateString })
         .orderBy('Payment.id', 'DESC');
 
       if (args.customerName) {
