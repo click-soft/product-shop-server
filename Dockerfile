@@ -52,6 +52,9 @@ ENV SMTP_PORT=${SMTP_PORT}
 ENV SMTP_AUTH_USER=${SMTP_AUTH_USER}
 ENV SMTP_AUTH_PASS=${SMTP_AUTH_PASS}
 
+# Time Zone
+ENV TZ=Asis/Seoul
+
 RUN pnpm install 
 
 # COPY . .
