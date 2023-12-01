@@ -247,7 +247,7 @@ export class PaymentService {
       ykihos = await this.csService.getYkihosByEmCode(args.emCode);
     }
     const koFullDateFormat = (date: Date) =>
-      koDateFormat(date, 'yyyy-MM-dd HH:mm:ss');
+      koDateFormat(date, 'YYYY-MM-dd HH:mm:ss');
 
     const startDateString = koFullDateFormat(args.startDate);
     const endDateString = koFullDateFormat(args.endDate);
