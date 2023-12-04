@@ -15,6 +15,7 @@ import PaymentVirtual from './entities/cpm/payment-virtual.entity';
 import PaymentRefund from './entities/cpm/payment-refund.entity';
 import { AccountTemp } from './entities/cpm/account-temp.entity';
 import ProductListImage from './entities/cpm/product-list-image.entity';
+import ProductListWebBunryu from './entities/cpm/product-list-web-bunryu.entity';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import ProductListImage from './entities/cpm/product-list-image.entity';
       PaymentVirtual,
       PaymentRefund,
       AccountTemp,
+      ProductListWebBunryu,
     ]),
   ],
   exports: [TypeOrmModule],

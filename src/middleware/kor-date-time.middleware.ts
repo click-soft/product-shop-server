@@ -21,29 +21,11 @@ export class KorDateTimeMiddleware implements NestMiddleware {
     return iso8601Regex.test(value);
   }
 
-  private isDateConvertible(value) {
-    console.log(value);
-
-    if (value instanceof Date) {
-      return true;
-    }
-    return false;
-    // Date 생성자를 사용하여 변환을 시도
-
-    // isNaN 함수를 사용하여 유효한 날짜인지 확인
-    // (유효한 날짜가 아니면 NaN을 반환)
-    // return !isNaN(convertedDate.getTime());
-  }
-
   private transformDates(obj: any): any {
     for (const key in obj) {
       if (obj.hasOwnProperty(key)) {
         if (this.isISO8601DateTime(obj[key])) {
-          console.log('first', obj[key]);
-
           obj[key] = dayjs(obj[key]).tz('Asia/Seoul').format();
-
-          console.log('last', obj[key]);
         } else if (typeof obj[key] === 'object') {
           obj[key] = this.transformDates(obj[key]);
         }

@@ -74,7 +74,6 @@ export class AuthService {
 
   async refresh(key: string): Promise<TokenResult> {
     const refreshToken = await this.accountService.getRefreshToken(key);
-    console.log(key);
 
     try {
       const payload = await this.jwtService.verify(refreshToken, {

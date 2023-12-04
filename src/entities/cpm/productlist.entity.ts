@@ -41,6 +41,10 @@ export class ProductList extends BaseEntity {
   @Column({ name: 'pl_step' })
   step: number;
 
+  @Field()
+  @Column({ name: 'pl_fit' })
+  fit: boolean;
+
   @Field(() => ProductListSub)
   productListSub: ProductListSub;
 }

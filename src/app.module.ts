@@ -28,6 +28,7 @@ import { ImagesModule } from './images/images.module';
 import { TestModule } from './api/test/test.module';
 import { Test2Module } from './api/test2/test2.module';
 import { KorDateTimeMiddleware } from './middleware/kor-date-time.middleware';
+import { ProductListWebBunryuModule } from './api/product-list-web-bunryu/product-list-web-bunryu.module';
 
 @Module({
   imports: [
@@ -63,12 +64,13 @@ import { KorDateTimeMiddleware } from './middleware/kor-date-time.middleware';
     ImagesModule,
     TestModule,
     Test2Module,
+    ProductListWebBunryuModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(KorDateTimeMiddleware).forRoutes('*');
-  }
+export class AppModule {
+  // configure(consumer: MiddlewareConsumer) {
+  //   consumer.apply(KorDateTimeMiddleware).forRoutes('*');
+  // }
 }

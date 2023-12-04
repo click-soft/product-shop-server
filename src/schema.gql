@@ -187,6 +187,7 @@ type ProductList {
   web: Boolean!
   bunryu: String!
   step: Float!
+  fit: Boolean!
   productListSub: ProductListSub!
 }
 
@@ -294,6 +295,12 @@ type Account {
   updatedAt: DateTime
 }
 
+type ProductListWebBunryu {
+  code: String!
+  name: String!
+  fit: Boolean!
+}
+
 type CsType {
   jisa: String!
   code: String!
@@ -375,6 +382,7 @@ type Query {
   getPaymentItemById(id: Int!): PaymentItem!
   getManagers: [Em!]!
   test(id: Int!): Test!
+  getWebBunryus: [ProductListWebBunryu!]!
 }
 
 type Mutation {
